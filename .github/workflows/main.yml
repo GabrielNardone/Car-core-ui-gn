@@ -2,9 +2,9 @@ name: CI Workflow
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
-    branches: ["*"]
+    branches: ['*']
 
 env:
   PORT: 3000
@@ -13,6 +13,7 @@ env:
 
 jobs:
   build:
+    permissions: write-all
     runs-on: ubuntu-latest
     strategy:
       matrix:
