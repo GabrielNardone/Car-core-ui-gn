@@ -1,5 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import { AdminPage } from '@/pages/admin/layout/AdminPage';
+
 import Root from '@pages/Root';
 import About from '@pages/about/About';
 import Home from '@pages/home/Home';
@@ -16,6 +18,10 @@ const router = createBrowserRouter([
 			{
 				path: '/about',
 				element: <About />,
+			},
+			{
+				path: '/admin',
+				element: <AdminPage />,
 			},
 		],
 	},
