@@ -22,8 +22,10 @@ export const CarPage = () => {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		getAllCars().then((resp) => setCars(resp?.data));
-		setIsLoading(false);
+		getAllCars().then((resp) => {
+			setCars(resp?.data);
+			setIsLoading(true);
+		});
 	}, []);
 
 	return (
@@ -95,7 +97,7 @@ export const CarPage = () => {
 										</thead>
 										<tbody className="divide-y divide-gray-800">
 											{isLoading ? (
-												<span>Loading...</span>
+												<span className="text-white">Loading...</span>
 											) : (
 												cars?.map((car) => (
 													<tr key={car.id}>
