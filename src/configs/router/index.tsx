@@ -1,5 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import { CarForm } from '@/pages/admin/car/CarForm';
+import { CarPage } from '@/pages/admin/car/CarPage';
 import { AdminPage } from '@/pages/admin/layout/AdminPage';
 
 import Root from '@pages/Root';
@@ -22,6 +24,16 @@ const router = createBrowserRouter([
 			{
 				path: '/admin',
 				element: <AdminPage />,
+				children: [
+					{
+						path: '/admin/car',
+						element: <CarPage />,
+					},
+					{
+						path: '/admin/car-form',
+						element: <CarForm />,
+					},
+				],
 			},
 		],
 	},
