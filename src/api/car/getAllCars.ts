@@ -1,12 +1,10 @@
 import Api from '../index';
 
-import { newCarProps } from '@/pages/admin/car/CarForm';
-
-export const getAllCars = async (newCar: newCarProps) => {
+export const getAllCars = async () => {
 	try {
-		const resp = await Api.post('/car', newCar);
+		const resp = Api.get('/car');
 
-		console.log(resp);
+		return resp;
 	} catch (error) {
 		console.log(error);
 	}

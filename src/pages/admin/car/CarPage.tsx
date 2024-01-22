@@ -1,34 +1,31 @@
 import { PhotoIcon } from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const people = [
-	{
-		brand: 'Ford',
-		model: 'Logan',
-		color: 'Green',
-		pricePerDay: 10000,
-	},
-	{
-		brand: 'Ford',
-		model: 'Logan',
-		color: 'Green',
-		pricePerDay: 10000,
-	},
-	{
-		brand: 'Ford',
-		model: 'Logan',
-		color: 'Green',
-		pricePerDay: 10000,
-	},
-	{
-		brand: 'Ford',
-		model: 'Logan',
-		color: 'Green',
-		pricePerDay: 10000,
-	},
-];
+import { getAllCars } from '@/api/car/getAllCars';
+
+interface Cars {
+	id: number;
+	createdAt: string;
+	updatedAt: string;
+	brand: string;
+	model: string;
+	color: string;
+	passengers: number;
+	ac: boolean;
+	pricePerDay: number;
+	images: any[];
+}
 
 export const CarPage = () => {
+	const [cars, setCars] = useState<Cars[]>();
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		getAllCars().then((resp) => setCars(resp?.data));
+		setIsLoading(false);
+	}, []);
+
 	return (
 		<div className="flex-1">
 			<div className="mx-auto max-w-7xl">
@@ -97,34 +94,38 @@ export const CarPage = () => {
 											</tr>
 										</thead>
 										<tbody className="divide-y divide-gray-800">
-											{people.map((person, index) => (
-												<tr key={index}>
-													<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
-														{person.brand}
-													</td>
-													<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-														{person.model}
-													</td>
-													<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-														{person.color}
-													</td>
-													<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-														{person.pricePerDay}
-													</td>
-													<td className="flex whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-														See gallery <PhotoIcon className="w-6 ml-2" />
-													</td>
-													<td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-														<a
-															href="#"
-															className="text-indigo-400 hover:text-indigo-300"
-														>
-															Edit
-															<span className="sr-only">, {person.brand}</span>
-														</a>
-													</td>
-												</tr>
-											))}
+											{isLoading ? (
+												<span>Loading...</span>
+											) : (
+												cars?.map((car) => (
+													<tr key={car.id}>
+														<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
+															{car.brand}
+														</td>
+														<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+															{car.model}
+														</td>
+														<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+															{car.color}
+														</td>
+														<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+															{car.pricePerDay}
+														</td>
+														<td className="flex whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+															See gallery <PhotoIcon className="w-6 ml-2" />
+														</td>
+														<td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+															<a
+																href="#"
+																className="text-indigo-400 hover:text-indigo-300"
+															>
+																Edit
+																<span className="sr-only">, {car.brand}</span>
+															</a>
+														</td>
+													</tr>
+												))
+											)}
 										</tbody>
 									</table>
 								</div>

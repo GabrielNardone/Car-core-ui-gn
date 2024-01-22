@@ -1,7 +1,7 @@
 import { ArrowUturnLeftIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 
-import { getAllCars } from '@/api/car/getAllCars';
+import { createCar } from '@/api/car/createCar';
 import { useForm } from '@/hooks/useForm';
 
 export interface newCarProps {
@@ -36,7 +36,7 @@ export const CarForm = () => {
 	const handleNewCarSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		getAllCars(formState);
+		createCar(formState);
 		onResetForm();
 	};
 

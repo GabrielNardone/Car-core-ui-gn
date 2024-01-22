@@ -1,0 +1,50 @@
+[
+	{
+		"id": 2,
+		"createdAt": "2024-01-22T13:35:39.183Z",
+		"updatedAt": "2024-01-22T13:35:39.183Z",
+		"brand": "Toyota",
+		"model": "heroic",
+		"color": "black",
+		"passengers": 4,
+		"ac": true,
+		"pricePerDay": 750000,
+		"images": []
+	},
+	{
+		"id": 5,
+		"createdAt": "2024-01-22T13:37:18.343Z",
+		"updatedAt": "2024-01-22T13:37:18.343Z",
+		"brand": "Toyota",
+		"model": "heroic",
+		"color": "black",
+		"passengers": 4,
+		"ac": true,
+		"pricePerDay": 750000,
+		"images": []
+	},
+	{
+		"id": 8,
+		"createdAt": "2024-01-22T13:38:12.872Z",
+		"updatedAt": "2024-01-22T13:38:12.872Z",
+		"brand": "Toyota",
+		"model": "heroic",
+		"color": "black",
+		"passengers": 4,
+		"ac": true,
+		"pricePerDay": 750000,
+		"images": []
+	},
+	{
+		"id": 6,
+		"createdAt": "2024-01-22T13:37:44.213Z",
+		"updatedAt": "2024-01-22T13:37:44.213Z",
+		"brand": "Toyota",
+		"model": "heroic",
+		"color": "black",
+		"passengers": 4,
+		"ac": true,
+		"pricePerDay": 750000,
+		"images": []
+	}
+]

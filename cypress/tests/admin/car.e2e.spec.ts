@@ -22,3 +22,17 @@ describe('Should check create car form functionalities', () => {
 		});
 	});
 });
+
+describe('Should check display of cars after GET request', () => {
+	beforeEach(() => {
+		cy.intercept('GET', 'http://localhost:5000/api/car', {
+			fixture: 'get_all_cars_mock.json',
+			statusCode: 200,
+		}).as('getRequest');
+		cy.visit('/admin/car');
+	});
+
+	it('Should display a list of cars after a successful GET request', () => {
+		cy.wait('@getRequest');
+	});
+});
