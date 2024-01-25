@@ -3,14 +3,14 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { createCar } from '@/api/car/createCar';
+import { createCar } from '@/service/api/car/create-car';
 
-const newCar = {
+const NEW_CAR_INITIAL_STEATE = {
 	brand: '',
 	model: '',
 	color: '',
-	passengers: 1,
-	ac: false,
+	passengers: '',
+	ac: '',
 	pricePerDay: 0,
 };
 
@@ -18,18 +18,33 @@ export const CarForm = () => {
 	const navigate = useNavigate();
 
 	const formik = useFormik({
-		initialValues: newCar,
+		initialValues: NEW_CAR_INITIAL_STEATE,
 		validationSchema: yup.object({
-			brand: yup.string().required('Required').min(3).max(21),
-			model: yup.string().required('Required').min(3).max(21),
-			color: yup.string().required('Required').min(3).max(21),
+			brand: yup
+				.string()
+				.required('Required')
+				.min(3, 'At least (3) characters')
+				.max(21, 'Maximum (21) characters'),
+			model: yup
+				.string()
+				.required('Required')
+				.min(3, 'At least (3) characters')
+				.max(21, 'Maximum (21) characters'),
+			color: yup.string().required('Required'),
 			passengers: yup.number().required('Required'),
 			ac: yup.boolean().required('Required'),
-			pricePerDay: yup.number().required('Required'),
+			pricePerDay: yup
+				.number()
+				.required('Required')
+				.positive('Must be a positive number'),
 		}),
 		onSubmit: (values) => {
-			console.log(values);
-			createCar(values);
+			createCar({
+				...values,
+				passengers: Number(values.passengers),
+				ac: values.ac === 'true' ? true : false,
+			});
+			formik.resetForm();
 		},
 	});
 
@@ -79,6 +94,11 @@ export const CarForm = () => {
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('brand')}
 								/>
+								{formik.touched.brand && formik.errors.brand && (
+									<p data-cy="brand-error" className="text-red-500">
+										{formik.errors.brand}
+									</p>
+								)}
 							</div>
 						</div>
 
@@ -97,6 +117,11 @@ export const CarForm = () => {
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('model')}
 								/>
+								{formik.touched.model && formik.errors.model && (
+									<p data-cy="model-error" className="text-red-500">
+										{formik.errors.model}
+									</p>
+								)}
 							</div>
 						</div>
 
@@ -123,6 +148,11 @@ export const CarForm = () => {
 									<option value={'dark blue'}>Dark Blue</option>
 									<option value={'red'}>Red</option>
 								</select>
+								{formik.touched.color && formik.errors.color && (
+									<p data-cy="color-error" className="text-red-500">
+										{formik.errors.color}
+									</p>
+								)}
 							</div>
 						</div>
 
@@ -150,6 +180,11 @@ export const CarForm = () => {
 									<option value={6}>6</option>
 									<option value={8}>8</option>
 								</select>
+								{formik.touched.passengers && formik.errors.passengers && (
+									<p data-cy="passengers-error" className="text-red-500">
+										{formik.errors.passengers}
+									</p>
+								)}
 							</div>
 						</div>
 
@@ -173,6 +208,11 @@ export const CarForm = () => {
 									<option value={'true'}>Yes</option>
 									<option value={'false'}>No</option>
 								</select>
+								{formik.touched.ac && formik.errors.ac && (
+									<p data-cy="ac-error" className="text-red-500">
+										{formik.errors.ac}
+									</p>
+								)}
 							</div>
 						</div>
 
@@ -191,15 +231,20 @@ export const CarForm = () => {
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('pricePerDay')}
 								/>
+								{formik.touched.pricePerDay && formik.errors.pricePerDay && (
+									<p data-cy="pricePerDay-error" className="text-red-500">
+										{formik.errors.pricePerDay}
+									</p>
+								)}
 							</div>
 						</div>
 					</div>
 
 					<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 						<div className="col-span-full">
-							{/* <label className="block text-sm font-medium leading-6 text-white">
+							<label className="block text-sm font-medium leading-6 text-white">
 								Pictures
-							</label> */}
+							</label>
 							<div className="mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-10">
 								<div className="text-center">
 									<PhotoIcon
@@ -240,6 +285,8 @@ export const CarForm = () => {
 				</button>
 				<button
 					type="submit"
+					data-cy="submit-button"
+					disabled={Object.keys(formik.errors).length > 0}
 					className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
 				>
 					Create

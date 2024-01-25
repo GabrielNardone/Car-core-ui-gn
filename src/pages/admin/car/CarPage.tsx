@@ -2,10 +2,10 @@ import { PhotoIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Cars, getAllCars } from '@/api/car/getAllCars';
+import { ICars, getAllCars } from '@/service/api/car/get-all-cars';
 
 export const CarPage = () => {
-	const [cars, setCars] = useState<Cars[]>();
+	const [cars, setCars] = useState<ICars[]>();
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
@@ -89,7 +89,7 @@ export const CarPage = () => {
 												</tr>
 											) : (
 												cars?.map((car) => (
-													<tr key={car.id}>
+													<tr key={car.id} data-cy="car-table">
 														<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
 															{car.brand}
 														</td>

@@ -1,13 +1,28 @@
-describe('Should check create car form functionalities', () => {
+describe('Car table', () => {
+	beforeEach(() => {
+		cy.visit('/admin/car');
+		cy.intercept('GET', 'http://localhost:5000/api/car', {
+			fixture: 'get-all-cars-mock.json',
+			statusCode: 200,
+		}).as('getAllCarRequest');
+	});
+
+	it('Should display a list of cars', () => {
+		cy.wait('@getAllCarRequest');
+		cy.get('[data-cy=car-table]').should('have.length', 4);
+	});
+});
+
+describe('Car form', () => {
 	beforeEach(() => {
 		cy.visit('/admin/car-form');
 		cy.intercept('POST', 'http://localhost:5000/api/car', {
-			fixture: 'create_car_success_mock.json',
+			fixture: 'create-car-success-mock.json',
 			statusCode: 201,
-		}).as('postRequest');
+		}).as('newCarPostRequest');
 	});
 
-	it('Should check if the create car form success', () => {
+	it('Should create a new car', () => {
 		cy.get('[data-cy=brand]').type('Toyota');
 		cy.get('[data-cy=model]').type('heroic');
 		cy.get('[data-cy=color]').select('black');
@@ -17,22 +32,32 @@ describe('Should check create car form functionalities', () => {
 
 		cy.get('[data-cy=car-form]').submit();
 
-		cy.wait('@postRequest').then((interception) => {
-			expect(interception.response.statusCode).to.equal(201);
+		cy.wait('@newCarPostRequest').then((interception) => {
+			expect(interception.response?.statusCode).to.equal(201);
+			expect(interception.request.body).to.deep.equal({
+				brand: 'Toyota',
+				model: 'heroic',
+				color: 'black',
+				passengers: 4,
+				ac: true,
+				pricePerDay: 750000,
+			});
 		});
 	});
-});
 
-describe('Should check display of cars after GET request', () => {
-	beforeEach(() => {
-		cy.intercept('GET', 'http://localhost:5000/api/car', {
-			fixture: 'get_all_cars_mock.json',
-			statusCode: 200,
-		}).as('getRequest');
-		cy.visit('/admin/car');
-	});
+	it('Should display errors if inupts don´t match validations', () => {
+		cy.get('[data-cy=brand]').type('To');
+		cy.get('[data-cy=pricePerDay]').type('0');
 
-	it('Should display a list of cars after a successful GET request', () => {
-		cy.wait('@getRequest');
+		cy.get('[data-cy=car-form]').submit();
+
+		cy.get('[data-cy=brand-error]').should('be.visible');
+		cy.get('[data-cy=model-error]').should('be.visible');
+		cy.get('[data-cy=color-error]').should('be.visible');
+		cy.get('[data-cy=passengers-error]').should('be.visible');
+		cy.get('[data-cy=ac-error]').should('be.visible');
+		cy.get('[data-cy=pricePerDay-error]').should('be.visible');
+
+		cy.get('[data-cy=submit-button]').should('be.disabled');
 	});
 });
