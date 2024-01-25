@@ -1,7 +1,10 @@
 import { PhotoIcon } from '@heroicons/react/24/outline';
+import { TrashIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
+import { deleteCar } from '@/service/api/car/delete-car';
 import { ICars, getAllCars } from '@/service/api/car/get-all-cars';
 
 export const CarPage = () => {
@@ -13,7 +16,7 @@ export const CarPage = () => {
 			setCars(resp);
 			setIsLoading(false);
 		});
-	}, []);
+	}, [cars]);
 
 	return (
 		<div className="flex-1">
@@ -80,6 +83,12 @@ export const CarPage = () => {
 												>
 													<span className="sr-only">Edit</span>
 												</th>
+												<th
+													scope="col"
+													className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+												>
+													<span className="sr-only">Delete</span>
+												</th>
 											</tr>
 										</thead>
 										<tbody className="divide-y divide-gray-800">
@@ -111,8 +120,32 @@ export const CarPage = () => {
 																className="text-indigo-400 hover:text-indigo-300"
 															>
 																Edit
-																<span className="sr-only">, {car.brand}</span>
 															</a>
+														</td>
+														<td className="relative whitespace-nowrap py-4 pl-6 pr-4 text-right text-sm font-medium sm:pr-0">
+															<TrashIcon
+																className="text-white w-6 hover:text-red-400 hover:cursor-pointer"
+																onClick={() => {
+																	Swal.fire({
+																		title: 'Are you sure?',
+																		text: "You won't be able to revert this!",
+																		background: '#191919',
+																		showCancelButton: true,
+																		confirmButtonColor: '#17B169',
+																		cancelButtonColor: '#d33',
+																		confirmButtonText: 'Yes, delete it!',
+																	}).then((result) => {
+																		if (result.isConfirmed) {
+																			deleteCar(car.id);
+																			Swal.fire(
+																				'Deleted!',
+																				'Your file has been deleted.',
+																				'success',
+																			);
+																		}
+																	});
+																}}
+															/>
 														</td>
 													</tr>
 												))
