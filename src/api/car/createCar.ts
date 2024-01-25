@@ -1,8 +1,15 @@
 import Api from '../index';
 
-import { newCarProps } from '@/pages/admin/car/CarForm';
+export interface newCarProps {
+	brand: string;
+	model: string;
+	color: string;
+	passengers: number;
+	ac: boolean;
+	pricePerDay: number;
+}
 
-export const createCar = async (newCar: newCarProps) => {
+export const createCar = async (newCar: newCarProps): Promise<void> => {
 	try {
 		const resp = await Api.post('/car', newCar);
 

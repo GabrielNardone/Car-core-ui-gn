@@ -2,20 +2,7 @@ import { PhotoIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { getAllCars } from '@/api/car/getAllCars';
-
-interface Cars {
-	id: number;
-	createdAt: string;
-	updatedAt: string;
-	brand: string;
-	model: string;
-	color: string;
-	passengers: number;
-	ac: boolean;
-	pricePerDay: number;
-	images: any[];
-}
+import { Cars, getAllCars } from '@/api/car/getAllCars';
 
 export const CarPage = () => {
 	const [cars, setCars] = useState<Cars[]>();
@@ -23,8 +10,8 @@ export const CarPage = () => {
 
 	useEffect(() => {
 		getAllCars().then((resp) => {
-			setCars(resp?.data);
-			setIsLoading(true);
+			setCars(resp);
+			setIsLoading(false);
 		});
 	}, []);
 
@@ -97,7 +84,9 @@ export const CarPage = () => {
 										</thead>
 										<tbody className="divide-y divide-gray-800">
 											{isLoading ? (
-												<span className="text-white">Loading...</span>
+												<tr className="text-white">
+													<td>Loading...</td>
+												</tr>
 											) : (
 												cars?.map((car) => (
 													<tr key={car.id}>

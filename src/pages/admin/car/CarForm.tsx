@@ -1,49 +1,43 @@
 import { ArrowUturnLeftIcon, PhotoIcon } from '@heroicons/react/24/solid';
+import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
 
 import { createCar } from '@/api/car/createCar';
-import { useForm } from '@/hooks/useForm';
-
-export interface newCarProps {
-	brand: string;
-	model: string;
-	color: string;
-	passengers: number | string;
-	ac: boolean | string;
-	pricePerDay: number | string;
-}
 
 const newCar = {
 	brand: '',
 	model: '',
 	color: '',
-	passengers: '',
-	ac: '',
-	pricePerDay: '',
+	passengers: 1,
+	ac: false,
+	pricePerDay: 0,
 };
 
 export const CarForm = () => {
 	const navigate = useNavigate();
 
-	const {
-		onInputChange,
-		onResetForm,
-		formState,
-		onSelectBooleanChange,
-		onNumberInputChange,
-	} = useForm(newCar);
-
-	const handleNewCarSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-
-		createCar(formState);
-		onResetForm();
-	};
+	const formik = useFormik({
+		initialValues: newCar,
+		validationSchema: yup.object({
+			brand: yup.string().required('Required').min(3).max(21),
+			model: yup.string().required('Required').min(3).max(21),
+			color: yup.string().required('Required').min(3).max(21),
+			passengers: yup.number().required('Required'),
+			ac: yup.boolean().required('Required'),
+			pricePerDay: yup.number().required('Required'),
+		}),
+		onSubmit: (values) => {
+			console.log(values);
+			createCar(values);
+		},
+	});
 
 	return (
 		<form
 			className="flex-1 p-6"
-			onSubmit={(event) => handleNewCarSubmit(event)}
+			onSubmit={formik.handleSubmit}
+			noValidate
 			data-cy="car-form"
 		>
 			<div className="space-y-10">
@@ -80,12 +74,10 @@ export const CarForm = () => {
 							<div className="mt-2">
 								<input
 									data-cy="brand"
-									type="text"
-									name="brand"
 									id="brand"
+									type="text"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-									value={formState.brand}
-									onChange={(event) => onInputChange(event)}
+									{...formik.getFieldProps('brand')}
 								/>
 							</div>
 						</div>
@@ -100,12 +92,10 @@ export const CarForm = () => {
 							<div className="mt-2">
 								<input
 									data-cy="model"
-									type="text"
-									name="model"
 									id="model"
+									type="text"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-									value={formState.model}
-									onChange={(event) => onInputChange(event)}
+									{...formik.getFieldProps('model')}
 								/>
 							</div>
 						</div>
@@ -120,11 +110,9 @@ export const CarForm = () => {
 							<div className="mt-2">
 								<select
 									data-cy="color"
-									name="color"
 									id="color"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
-									value={formState.color}
-									onChange={(event) => onInputChange(event)}
+									{...formik.getFieldProps('color')}
 								>
 									<option value="" disabled>
 										Select Color
@@ -147,12 +135,11 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<select
+									typeof="number"
 									data-cy="passengers"
-									name="passengers"
 									id="passengers"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
-									value={formState.passengers}
-									onChange={(event) => onNumberInputChange(event)}
+									{...formik.getFieldProps('passengers')}
 								>
 									<option value="" disabled>
 										Select Number
@@ -177,10 +164,8 @@ export const CarForm = () => {
 								<select
 									data-cy="ac"
 									id="ac"
-									name="ac"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
-									value={formState.ac}
-									onChange={(event) => onSelectBooleanChange(event)}
+									{...formik.getFieldProps('ac')}
 								>
 									<option value="" disabled>
 										Select Option
@@ -193,7 +178,7 @@ export const CarForm = () => {
 
 						<div className="sm:col-span-3">
 							<label
-								htmlFor="price"
+								htmlFor="pricePerDay"
 								className="block text-sm font-medium leading-6 text-white"
 							>
 								Price Per Day
@@ -202,11 +187,9 @@ export const CarForm = () => {
 								<input
 									data-cy="pricePerDay"
 									type="number"
-									name="pricePerDay"
 									id="pricePerDay"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-									value={formState.pricePerDay}
-									onChange={(event) => onNumberInputChange(event)}
+									{...formik.getFieldProps('pricePerDay')}
 								/>
 							</div>
 						</div>
@@ -214,12 +197,9 @@ export const CarForm = () => {
 
 					<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 						<div className="col-span-full">
-							<label
-								htmlFor="pictures"
-								className="block text-sm font-medium leading-6 text-white"
-							>
+							{/* <label className="block text-sm font-medium leading-6 text-white">
 								Pictures
-							</label>
+							</label> */}
 							<div className="mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-10">
 								<div className="text-center">
 									<PhotoIcon
