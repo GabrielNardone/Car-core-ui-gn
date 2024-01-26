@@ -9,6 +9,7 @@ describe('Car table', () => {
 
 	it('Should display a list of cars', () => {
 		cy.wait('@getAllCarRequest');
+
 		cy.get('[data-cy=car-table]').should('have.length', 4);
 	});
 });
@@ -59,5 +60,31 @@ describe('Car form', () => {
 		cy.get('[data-cy=pricePerDay-error]').should('be.visible');
 
 		cy.get('[data-cy=submit-button]').should('be.disabled');
+	});
+});
+
+describe('Car table delete', () => {
+	beforeEach(() => {
+		cy.visit('/admin/car');
+		cy.intercept('GET', 'http://localhost:5000/api/car', {
+			fixture: 'get-all-cars-mock.json',
+			statusCode: 200,
+		}).as('getAllCarRequest');
+	});
+
+	it('Should display a list of cars', () => {
+		cy.wait('@getAllCarRequest');
+
+		cy.intercept('DELETE', 'http://localhost:5000/api/car/2', {
+			body: { data: true },
+			statusCode: 200,
+		}).as('deleteCarRequest');
+
+		cy.get('[data-cy=delete-car]').should('be.visible').eq(0).click();
+		cy.get('[data-cy=confirm-delete]').should('be.visible').click();
+
+		cy.get('[data-cy=close-delete-alert]').should('be.visible').click();
+
+		cy.get('[data-cy=car-table]').should('have.length', 3);
 	});
 });

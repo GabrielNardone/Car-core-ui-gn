@@ -16,7 +16,12 @@ export const CarPage = () => {
 			setCars(resp);
 			setIsLoading(false);
 		});
-	}, [cars]);
+	}, []);
+
+	const handleDeleteCar = async (carId: number) => {
+		deleteCar(carId);
+		setCars((prevCars) => prevCars?.filter((car) => car.id !== carId));
+	};
 
 	return (
 		<div className="flex-1">
@@ -124,24 +129,30 @@ export const CarPage = () => {
 														</td>
 														<td className="relative whitespace-nowrap py-4 pl-6 pr-4 text-right text-sm font-medium sm:pr-0">
 															<TrashIcon
+																data-cy="delete-car"
 																className="text-white w-6 hover:text-red-400 hover:cursor-pointer"
 																onClick={() => {
 																	Swal.fire({
 																		title: 'Are you sure?',
 																		text: "You won't be able to revert this!",
-																		background: '#191919',
+																		background: '#000000',
 																		showCancelButton: true,
 																		confirmButtonColor: '#17B169',
 																		cancelButtonColor: '#d33',
-																		confirmButtonText: 'Yes, delete it!',
+																		confirmButtonText:
+																			'<span data-cy="confirm-delete">Yes, delete it!</span>',
 																	}).then((result) => {
 																		if (result.isConfirmed) {
-																			deleteCar(car.id);
-																			Swal.fire(
-																				'Deleted!',
-																				'Your file has been deleted.',
-																				'success',
-																			);
+																			handleDeleteCar(car.id);
+																			Swal.fire({
+																				title: 'Deleted!',
+																				text: 'Your car has been deleted.',
+																				icon: 'success',
+																				background: '#000000',
+																				confirmButtonColor: '#17B169',
+																				confirmButtonText:
+																					'<span data-cy="close-delete-alert">Ok</span>',
+																			});
 																		}
 																	});
 																}}
