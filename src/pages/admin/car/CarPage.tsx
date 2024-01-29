@@ -4,12 +4,20 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
+import { Carousel } from '@/components/admin/car/Carousel';
+import { GalleryModal } from '@/components/admin/car/GalleryModal';
 import { deleteCar } from '@/service/api/car/delete-car';
 import { ICars, getAllCars } from '@/service/api/car/get-all-cars';
 
 export const CarPage = () => {
 	const [cars, setCars] = useState<ICars[]>();
 	const [isLoading, setIsLoading] = useState(true);
+
+	const [isOpen, setIsOpen] = useState(false);
+
+	const onCloseModal = () => {
+		setIsOpen(false);
+	};
 
 	useEffect(() => {
 		getAllCars().then((resp) => {
@@ -117,7 +125,19 @@ export const CarPage = () => {
 															{car.pricePerDay}
 														</td>
 														<td className="flex whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-															See gallery <PhotoIcon className="w-6 ml-2" />
+															<button
+																onClick={() => setIsOpen(true)}
+																className="text-indigo-400 hover:text-indigo-300"
+															>
+																See gallery
+															</button>
+															<PhotoIcon className="w-6 ml-2" />
+															<GalleryModal
+																isOpen={isOpen}
+																onCloseModal={onCloseModal}
+															>
+																<Carousel images={car.images} />
+															</GalleryModal>
 														</td>
 														<td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
 															<a
@@ -136,6 +156,7 @@ export const CarPage = () => {
 																		title: 'Are you sure?',
 																		text: "You won't be able to revert this!",
 																		background: '#000000',
+																		color: '#F0F0F0',
 																		showCancelButton: true,
 																		confirmButtonColor: '#17B169',
 																		cancelButtonColor: '#d33',
@@ -149,6 +170,7 @@ export const CarPage = () => {
 																				text: 'Your car has been deleted.',
 																				icon: 'success',
 																				background: '#000000',
+																				color: '#F0F0F0',
 																				confirmButtonColor: '#17B169',
 																				confirmButtonText:
 																					'<span data-cy="close-delete-alert">Ok</span>',

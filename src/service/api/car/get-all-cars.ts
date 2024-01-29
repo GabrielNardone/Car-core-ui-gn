@@ -1,6 +1,6 @@
 import Api from '../../index';
 
-interface IimagesProps {
+export interface IimagesProps {
 	id: number;
 	createdAt: Date;
 	updatedAt: Date;

@@ -1,24 +1,66 @@
 import { ArrowUturnLeftIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import * as yup from 'yup';
 
 import { createCar } from '@/service/api/car/create-car';
+import { uploadCarPicture } from '@/service/api/car/upload-picture';
 
-const NEW_CAR_INITIAL_STEATE = {
+const NEW_CAR_INITIAL_STATE = {
 	brand: '',
 	model: '',
 	color: '',
 	passengers: '',
 	ac: '',
 	pricePerDay: 0,
+	picture: '',
+	title: '',
+	description: '',
+	type: '',
+	date: '',
 };
+
+interface IFormData {
+	picture: any;
+	title: string;
+	description: string;
+	type: string;
+	date: string;
+}
 
 export const CarForm = () => {
 	const navigate = useNavigate();
 
+	const fileUpload = (id: number, values: IFormData) => {
+		const formData = new FormData();
+		formData.append('file', values.picture);
+		formData.append('title', values.title);
+		formData.append('description', values.description);
+		formData.append('type', values.type);
+		formData.append('date', values.date);
+
+		uploadCarPicture(id, formData)
+			.then((status) => {
+				if (status === 201) {
+					Swal.fire({
+						position: 'top-end',
+						icon: 'success',
+						title: `<span data-cy="create-car-success">Car with id ${id} created!</span>`,
+						showConfirmButton: false,
+						timer: 2500,
+						background: '#000000',
+						color: '#F0F0F0',
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
 	const formik = useFormik({
-		initialValues: NEW_CAR_INITIAL_STEATE,
+		initialValues: NEW_CAR_INITIAL_STATE,
 		validationSchema: yup.object({
 			brand: yup
 				.string()
@@ -37,12 +79,36 @@ export const CarForm = () => {
 				.number()
 				.required('Required')
 				.positive('Must be a positive number'),
+			picture: yup.mixed().required('Required'),
+			title: yup
+				.string()
+				.required('Required')
+				.min(3, 'At least (3) characters')
+				.max(21, 'Maximum (21) characters'),
+			description: yup
+				.string()
+				.required('Required')
+				.min(3, 'At least (3) characters')
+				.max(120, 'Maximum (120) characters'),
+			type: yup.string().required('Required'),
+			date: yup.string().required('Required'),
 		}),
 		onSubmit: (values) => {
 			createCar({
-				...values,
+				brand: values.brand,
+				model: values.model,
+				color: values.color,
+				pricePerDay: Number(values.pricePerDay),
 				passengers: Number(values.passengers),
 				ac: values.ac === 'true' ? true : false,
+			}).then((id) => {
+				fileUpload(id, {
+					picture: values.picture[0],
+					title: values.title,
+					description: values.description,
+					type: values.type,
+					date: values.date,
+				});
 			});
 			formik.resetForm();
 		},
@@ -78,7 +144,7 @@ export const CarForm = () => {
 						Car Information
 					</h2>
 
-					<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+					<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 border-b border-white/10 pb-8">
 						<div className="sm:col-span-3">
 							<label
 								htmlFor="brand"
@@ -253,15 +319,19 @@ export const CarForm = () => {
 									/>
 									<div className="mt-4 flex text-sm leading-6 text-gray-400">
 										<label
-											htmlFor="file-upload"
+											htmlFor="picture"
 											className="relative cursor-pointer rounded-md bg-gray-900 font-semibold text-white focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-indigo-500"
 										>
 											<span>Upload a file</span>
 											<input
-												id="file-upload"
-												name="file-upload"
+												data-cy="picture"
+												id="picture"
+												name="picture"
 												type="file"
 												className="sr-only"
+												onChange={(e) =>
+													formik.setFieldValue('picture', e.currentTarget.files)
+												}
 											/>
 										</label>
 										<p className="pl-1">or drag and drop</p>
@@ -270,6 +340,112 @@ export const CarForm = () => {
 										PNG, JPG, GIF up to 10MB
 									</p>
 								</div>
+							</div>
+							{formik.touched.picture && formik.errors.picture && (
+								<p data-cy="picture-error" className="text-red-500">
+									{formik.errors.picture}
+								</p>
+							)}
+						</div>
+					</div>
+
+					<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+						<div className="sm:col-span-3">
+							<label
+								htmlFor="title"
+								className="block text-sm font-medium leading-6 text-white"
+							>
+								Title
+							</label>
+							<div className="mt-2">
+								<input
+									data-cy="title"
+									id="title"
+									type="text"
+									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+									{...formik.getFieldProps('title')}
+								/>
+								{formik.touched.title && formik.errors.title && (
+									<p data-cy="title-error" className="text-red-500">
+										{formik.errors.title}
+									</p>
+								)}
+							</div>
+						</div>
+
+						<div className="sm:col-span-3">
+							<label
+								htmlFor="description"
+								className="block text-sm font-medium leading-6 text-white"
+							>
+								Description
+							</label>
+							<div className="mt-2">
+								<input
+									data-cy="description"
+									id="description"
+									type="text"
+									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+									{...formik.getFieldProps('description')}
+								/>
+								{formik.touched.description && formik.errors.description && (
+									<p data-cy="description-error" className="text-red-500">
+										{formik.errors.description}
+									</p>
+								)}
+							</div>
+						</div>
+
+						<div className="sm:col-span-3">
+							<label
+								htmlFor="type"
+								className="block text-sm font-medium leading-6 text-white"
+							>
+								Type
+							</label>
+							<div className="mt-2">
+								<select
+									data-cy="type"
+									id="type"
+									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
+									{...formik.getFieldProps('type')}
+								>
+									<option value="" disabled>
+										Select type
+									</option>
+									<option value={'front'}>Front</option>
+									<option value={'back'}>Back</option>
+									<option value={'side'}>Side</option>
+									<option value={'other'}>Other</option>
+								</select>
+								{formik.touched.type && formik.errors.type && (
+									<p data-cy="type-error" className="text-red-500">
+										{formik.errors.type}
+									</p>
+								)}
+							</div>
+						</div>
+
+						<div className="sm:col-span-3">
+							<label
+								htmlFor="date"
+								className="block text-sm font-medium leading-6 text-white"
+							>
+								Date
+							</label>
+							<div className="mt-2">
+								<input
+									data-cy="date"
+									id="date"
+									type="date"
+									className="block w-full rounded-md border-0 bg-white/5 px-4 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+									{...formik.getFieldProps('date')}
+								/>
+								{formik.touched.date && formik.errors.date && (
+									<p data-cy="date-error" className="text-red-500">
+										{formik.errors.date}
+									</p>
+								)}
 							</div>
 						</div>
 					</div>
@@ -286,7 +462,6 @@ export const CarForm = () => {
 				<button
 					type="submit"
 					data-cy="submit-button"
-					disabled={Object.keys(formik.errors).length > 0}
 					className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
 				>
 					Create

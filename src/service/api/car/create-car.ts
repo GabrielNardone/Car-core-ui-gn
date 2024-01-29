@@ -13,7 +13,7 @@ export const createCar = async (newCar: newCarDto): Promise<number> => {
 	try {
 		const response = await Api.post('/car', newCar);
 
-		return response.status;
+		return response.data.id;
 	} catch (error) {
 		console.log(error);
 		throw error;

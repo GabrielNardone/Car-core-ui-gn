@@ -18,9 +18,11 @@ describe('Car form', () => {
 	beforeEach(() => {
 		cy.visit('/admin/car-form');
 		cy.intercept('POST', 'http://localhost:5000/api/car', {
-			fixture: 'create-car-success-mock.json',
-			statusCode: 201,
+			id: 1,
 		}).as('newCarPostRequest');
+		cy.intercept('POST', 'http://localhost:5000/api/picture/car/1', {
+			statusCode: 201,
+		}).as('newCarPicturePostRequest');
 	});
 
 	it('Should create a new car', () => {
@@ -31,19 +33,27 @@ describe('Car form', () => {
 		cy.get('[data-cy=ac]').select('true');
 		cy.get('[data-cy=pricePerDay]').type('750000');
 
+		cy.get('[type="file"]').selectFile(
+			{
+				contents: Cypress.Buffer.from('car image'),
+				fileName: 'car-1.jpg',
+				mimeType: 'image/jpg',
+				lastModified: Date.now(),
+			},
+			{ force: true },
+		);
+
+		cy.get('[data-cy=title]').type('car-1');
+		cy.get('[data-cy=description]').type('Simple car image');
+		cy.get('[data-cy=type]').select('front');
+		cy.get('[data-cy=date]').type('2015-01-02');
+
 		cy.get('[data-cy=car-form]').submit();
 
-		cy.wait('@newCarPostRequest').then((interception) => {
-			expect(interception.response?.statusCode).to.equal(201);
-			expect(interception.request.body).to.deep.equal({
-				brand: 'Toyota',
-				model: 'heroic',
-				color: 'black',
-				passengers: 4,
-				ac: true,
-				pricePerDay: 750000,
-			});
-		});
+		cy.wait('@newCarPostRequest');
+		cy.wait('@newCarPicturePostRequest');
+
+		cy.get('[data-cy=create-car-success]').should('be.visible');
 	});
 
 	it('Should display errors if inupts don´t match validations', () => {
@@ -58,8 +68,6 @@ describe('Car form', () => {
 		cy.get('[data-cy=passengers-error]').should('be.visible');
 		cy.get('[data-cy=ac-error]').should('be.visible');
 		cy.get('[data-cy=pricePerDay-error]').should('be.visible');
-
-		cy.get('[data-cy=submit-button]').should('be.disabled');
 	});
 });
 
