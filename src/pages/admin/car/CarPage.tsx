@@ -140,12 +140,22 @@ export const CarPage = () => {
 															</GalleryModal>
 														</td>
 														<td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-															<a
-																href="#"
+															<Link
+																data-cy={`edit-car-${car.id}`}
+																to={`/admin/car-edit/${car.id}`}
+																state={{
+																	id: car.id,
+																	brand: car.brand,
+																	model: car.model,
+																	color: car.color,
+																	pricePerDay: car.pricePerDay,
+																	ac: car.ac,
+																	passengers: car.passengers,
+																}}
 																className="text-indigo-400 hover:text-indigo-300"
 															>
 																Edit
-															</a>
+															</Link>
 														</td>
 														<td className="relative whitespace-nowrap py-4 pl-6 pr-4 text-right text-sm font-medium sm:pr-0">
 															<TrashIcon

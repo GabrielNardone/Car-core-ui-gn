@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import { CarEdit } from '@/pages/admin/car/CarEdit';
 import { CarForm } from '@/pages/admin/car/CarForm';
 import { CarPage } from '@/pages/admin/car/CarPage';
 import { AdminPage } from '@/pages/admin/layout/AdminPage';
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
 					{
 						path: '/admin/car-form',
 						element: <CarForm />,
+					},
+					{
+						path: '/admin/car-edit/:id',
+						element: <CarEdit />,
 					},
 				],
 			},

@@ -71,6 +71,61 @@ describe('Car form', () => {
 	});
 });
 
+describe('Car table edit', () => {
+	beforeEach(() => {
+		cy.visit('/admin/car');
+		cy.intercept('GET', 'http://localhost:5000/api/car', {
+			fixture: 'get-all-cars-mock.json',
+			statusCode: 200,
+		}).as('getAllCarRequest');
+		cy.intercept('GET', 'http://localhost:5000/api/car/2', {
+			fixture: 'get-car-by-id-mock.json',
+			statusCode: 200,
+		}).as('getCarByIdRequest');
+		cy.intercept('PATCH', 'http://localhost:5000/api/car/2', {
+			statusCode: 202,
+		}).as('getEditCarRequest');
+		cy.intercept('POST', 'http://localhost:5000/api/picture/car/2', {
+			statusCode: 201,
+		}).as('newCarPicturePostRequest');
+	});
+
+	it('Should edit a car', () => {
+		cy.get('[data-cy=edit-car-2]').click();
+
+		cy.get('[data-cy=brand]').type('VolksWagen');
+		cy.get('[data-cy=model]').type('Classic');
+
+		cy.get('[data-cy=car-edit-form]').submit();
+
+		cy.wait('@getEditCarRequest');
+		cy.get('[data-cy=car-edit-success]').should('be.visible');
+	});
+
+	it('Should upload a new car image', () => {
+		cy.get('[data-cy=edit-car-2]').click();
+
+		cy.get('[type="file"]').selectFile(
+			{
+				contents: Cypress.Buffer.from('car image'),
+				fileName: 'car-1.jpg',
+				mimeType: 'image/jpg',
+				lastModified: Date.now(),
+			},
+			{ force: true },
+		);
+
+		cy.get('[data-cy=car-edit-image-title]').type('VolksWagen1');
+		cy.get('[data-cy=car-edit-image-description]').type('Simple image');
+		cy.get('[data-cy=car-edit-image-type]').select('front');
+		cy.get('[data-cy=car-edit-image-date]').type('2023-02-06');
+
+		cy.get('[data-cy=car-edit-new-image-form]').submit();
+
+		cy.get('[data-cy=add-new-image]').should('be.visible');
+	});
+});
+
 describe('Car table delete', () => {
 	beforeEach(() => {
 		cy.visit('/admin/car');

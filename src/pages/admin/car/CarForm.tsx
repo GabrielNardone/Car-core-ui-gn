@@ -41,8 +41,8 @@ export const CarForm = () => {
 		formData.append('date', values.date);
 
 		uploadCarPicture(id, formData)
-			.then((status) => {
-				if (status === 201) {
+			.then((response) => {
+				if (response.status === 201) {
 					Swal.fire({
 						position: 'top-end',
 						icon: 'success',
