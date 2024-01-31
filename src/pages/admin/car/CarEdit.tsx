@@ -7,7 +7,7 @@ import * as yup from 'yup';
 
 import { deletePicture } from '@/service/api/car/delete-picture';
 import { editCar } from '@/service/api/car/edit-car';
-import { IimagesProps } from '@/service/api/car/get-all-cars';
+import { ICarImages } from '@/service/api/car/get-all-cars';
 import { getCarById } from '@/service/api/car/get-car-by-id';
 import { uploadCarPicture } from '@/service/api/car/upload-picture';
 
@@ -39,7 +39,7 @@ export const CarEdit = () => {
 	const { state: carInfo } = useLocation();
 	const navigate = useNavigate();
 
-	const [carPictures, setCarPictures] = useState<IimagesProps[]>([]);
+	const [carPictures, setCarPictures] = useState<ICarImages[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const fileUpload = (id: number, values: IFormData) => {
@@ -463,10 +463,9 @@ export const CarEdit = () => {
 													}
 												/>
 											</label>
-											<p className="pl-1">or drag and drop</p>
 										</div>
-										<p className="text-xs leading-5 text-gray-400">
-											PNG, JPG, GIF up to 10MB
+										<p className="text-lg leading-5 text-gray-400">
+											{formikCarImages.values.picture.length}
 										</p>
 									</div>
 								</div>

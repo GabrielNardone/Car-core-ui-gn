@@ -1,8 +1,8 @@
-import { IimagesProps } from './get-all-cars';
+import { ICarImages } from './get-all-cars';
 
 import Api from '@/service';
 
-export const getCarById = async (id: number): Promise<IimagesProps[]> => {
+export const getCarById = async (id: number): Promise<ICarImages[]> => {
 	try {
 		const response = await Api.get(`/car/${id}`);
 

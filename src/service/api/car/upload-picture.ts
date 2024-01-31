@@ -1,10 +1,10 @@
-import { IimagesProps } from './get-all-cars';
+import { ICarImages } from './get-all-cars';
 
 import Api from '@/service';
 
 interface IuploadCarPicture {
 	status: number;
-	data: IimagesProps;
+	data: ICarImages;
 }
 export const uploadCarPicture = async (
 	id: number,

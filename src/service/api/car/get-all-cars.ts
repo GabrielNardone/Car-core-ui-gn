@@ -1,6 +1,6 @@
 import Api from '../../index';
 
-export interface IimagesProps {
+export interface ICarImages {
 	id: number;
 	createdAt: Date;
 	updatedAt: Date;
@@ -21,7 +21,7 @@ export interface ICars {
 	passengers: number;
 	ac: boolean;
 	pricePerDay: number;
-	images: IimagesProps[];
+	images: ICarImages[];
 }
 
 export const getAllCars = async (): Promise<ICars[]> => {
