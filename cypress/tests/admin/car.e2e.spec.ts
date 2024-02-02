@@ -1,14 +1,12 @@
 describe('Car table', () => {
-	beforeEach(() => {
+	it('Should display a list of cars', () => {
 		cy.intercept('GET', '/api/car', {
 			fixture: 'get-all-cars-mock.json',
 			statusCode: 200,
-		}).as('getAllCar');
+		}).as('getAllCars');
 		cy.visit('/admin/car');
-	});
 
-	it('Should display a list of cars', () => {
-		cy.wait('@getAllCar');
+		cy.wait('@getAllCars');
 
 		cy.get('[data-cy=car-table]').should('have.length', 4);
 		cy.get('[data-cy=car-brand-2]').should('contain', 'BMW');
@@ -21,6 +19,20 @@ describe('Car table', () => {
 		cy.get('[data-cy=carousel-indicators]').should('be.visible');
 		cy.get('[data-cy=carousel-image]').should('be.visible');
 	});
+
+	it('Should diplay error alert when server error', () => {
+		cy.intercept('GET', '/api/car', {
+			statusCode: 500,
+		}).as('getAllCarsError');
+		cy.visit('/admin/car');
+
+		cy.wait('@getAllCarsError');
+		cy.get('[data-cy=get-all-cars-error-alert]').should('be.visible');
+		cy.get('[data-cy=get-all-cars-error-alert]').should(
+			'contain',
+			'Error: Request failed with status code 500',
+		);
+	});
 });
 
 describe('Car form', () => {
@@ -32,8 +44,6 @@ describe('Car form', () => {
 		cy.intercept('POST', '/api/picture/car/1', {
 			statusCode: 201,
 		}).as('newCarPicture');
-		//hacer que falle mandar un status code 500
-		//chequear el msj que viene en el error
 	});
 
 	it('Should create a new car', () => {
@@ -81,7 +91,7 @@ describe('Car form', () => {
 		cy.get('[data-cy=pricePerDay-error]').should('be.visible');
 	});
 
-	it('Should diplay error alert', () => {
+	it('Should diplay error alert when server error', () => {
 		cy.intercept('POST', '/api/car', {
 			statusCode: 500,
 		}).as('newCar');
@@ -115,7 +125,45 @@ describe('Car form', () => {
 		cy.get('[data-cy=create-car-error-alert]').should('be.visible');
 		cy.get('[data-cy=create-car-error-alert]').should(
 			'contain',
-			'Something went wrong!',
+			'Error: Request failed with status code 500',
+		);
+	});
+
+	it('Should diplay error alert of unproccesable entity', () => {
+		cy.intercept('POST', '/api/car', {
+			statusCode: 422,
+		}).as('newPictureError');
+
+		cy.get('[data-cy=brand]').type('Toyota');
+		cy.get('[data-cy=model]').type('heroic');
+		cy.get('[data-cy=color]').select('black');
+		cy.get('[data-cy=passengers]').select('4');
+		cy.get('[data-cy=ac]').select('true');
+		cy.get('[data-cy=pricePerDay]').type('750000');
+
+		cy.get('[type="file"]').selectFile(
+			{
+				contents: Cypress.Buffer.from('car image'),
+				fileName: 'car-1.jpg',
+				mimeType: 'image/jpg',
+				lastModified: Date.now(),
+			},
+			{ force: true },
+		);
+
+		cy.get('[data-cy=title]').type('car-1');
+		cy.get('[data-cy=description]').type('Simple car image');
+		cy.get('[data-cy=type]').select('front');
+		cy.get('[data-cy=date]').type('2015-01-02');
+
+		cy.get('[data-cy=car-form]').submit();
+
+		cy.wait('@newPictureError');
+
+		cy.get('[data-cy=create-car-error-alert]').should('be.visible');
+		cy.get('[data-cy=create-car-error-alert]').should(
+			'contain',
+			'Error: Request failed with status code 422',
 		);
 	});
 });
@@ -143,6 +191,21 @@ describe('Car table edit', () => {
 			body: { data: true },
 			statusCode: 200,
 		}).as('deletePicture');
+	});
+
+	it('Should diplay error alert when server error', () => {
+		cy.intercept('GET', '/api/car/2', {
+			statusCode: 500,
+		}).as('getCarByIdError');
+
+		cy.get('[data-cy=edit-car-2]').click();
+
+		cy.wait('@getCarByIdError');
+		cy.get('[data-cy=get-car-images-error-alert]').should('be.visible');
+		cy.get('[data-cy=get-car-images-error-alert]').should(
+			'contain',
+			'Error: Request failed with status code 500',
+		);
 	});
 
 	it('Should edit a car', () => {
@@ -178,6 +241,37 @@ describe('Car table edit', () => {
 		cy.get('[data-cy=car-edit-new-image-form]').submit();
 
 		cy.get('[data-cy=add-new-image]').should('be.visible');
+	});
+
+	it('Should display error when uploading a new car image', () => {
+		cy.intercept('POST', '/api/picture/car/2', {
+			statusCode: 422,
+		}).as('newPictureError');
+
+		cy.get('[data-cy=edit-car-2]').click();
+
+		cy.get('[type="file"]').selectFile(
+			{
+				contents: Cypress.Buffer.from('car image'),
+				fileName: 'car-1.jpg',
+				mimeType: 'image/jpg',
+				lastModified: Date.now(),
+			},
+			{ force: true },
+		);
+
+		cy.get('[data-cy=car-edit-image-title]').type('VolksWagen1');
+		cy.get('[data-cy=car-edit-image-description]').type('Simple image');
+		cy.get('[data-cy=car-edit-image-type]').select('front');
+		cy.get('[data-cy=car-edit-image-date]').type('2023-02-06');
+
+		cy.get('[data-cy=car-edit-new-image-form]').submit();
+
+		cy.get('[data-cy=create-picture-error-alert]').should('be.visible');
+		cy.get('[data-cy=create-picture-error-alert]').should(
+			'contain',
+			'Error: Request failed with status code 422',
+		);
 	});
 
 	it('Should delete a car image', () => {

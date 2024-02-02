@@ -25,7 +25,7 @@ interface ICarDto {
 	date: string;
 }
 
-export const fileUpload = (id: number, values: IFormData) => {
+export const fileUpload = (id: number, values: IFormData): void => {
 	const formData = new FormData();
 	formData.append('file', values.picture);
 	formData.append('title', values.title);
@@ -49,10 +49,16 @@ export const fileUpload = (id: number, values: IFormData) => {
 		})
 		.catch((error) => {
 			console.log(error);
+			Swal.fire({
+				icon: 'error',
+				title: `<span data-cy="create-picture-error-alert">${error}</span>`,
+				background: '#000000',
+				color: '#F0F0F0',
+			});
 		});
 };
 
-export const onCreateCar = async (values: ICarDto) => {
+export const onCreateCar = async (values: ICarDto): Promise<void> => {
 	try {
 		const id = await createCar({
 			brand: values.brand,
@@ -73,8 +79,7 @@ export const onCreateCar = async (values: ICarDto) => {
 		console.log(error);
 		Swal.fire({
 			icon: 'error',
-			title: `<span data-cy="create-car-error-alert">Something went wrong!</span>`,
-			text: `${error}`,
+			title: `<span data-cy="create-car-error-alert">${error}</span>`,
 			background: '#000000',
 			color: '#F0F0F0',
 		});

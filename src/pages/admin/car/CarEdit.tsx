@@ -75,6 +75,12 @@ export const CarEdit = () => {
 			})
 			.catch((error) => {
 				console.log(error);
+				Swal.fire({
+					icon: 'error',
+					title: `<span data-cy="create-picture-error-alert">${error}</span>`,
+					background: '#000000',
+					color: '#F0F0F0',
+				});
 			});
 	};
 
@@ -158,9 +164,19 @@ export const CarEdit = () => {
 	});
 
 	const onGettingCarById = async (): Promise<void> => {
-		const car = await getCarById(carInfo.id);
-		setCarPictures(car.images || []);
-		setIsLoading(false);
+		try {
+			const car = await getCarById(carInfo.id);
+			setCarPictures(car.images || []);
+			setIsLoading(false);
+		} catch (error) {
+			console.log(error);
+			Swal.fire({
+				icon: 'error',
+				title: `<span data-cy="get-car-images-error-alert">${error}</span>`,
+				background: '#000000',
+				color: '#F0F0F0',
+			});
+		}
 	};
 
 	useEffect(() => {

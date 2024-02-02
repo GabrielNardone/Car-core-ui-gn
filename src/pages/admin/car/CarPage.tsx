@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 import { CarTable } from '@/components/admin/car/CarTable';
 import { ICars, deleteCar, getAllCars } from '@/service/api/car/car-requests';
@@ -19,14 +20,24 @@ export const CarPage = () => {
 		setCars((prevCars) => prevCars?.filter((car) => car.id !== carId));
 	};
 
-	const onGettingAllCars = async () => {
-		const cars = await getAllCars();
-		setCars(cars);
-		setIsLoading(false);
+	const fetchCars = async () => {
+		try {
+			const cars = await getAllCars();
+			setCars(cars);
+			setIsLoading(false);
+		} catch (error) {
+			console.log(error);
+			Swal.fire({
+				icon: 'error',
+				title: `<span data-cy="get-all-cars-error-alert">${error}</span>`,
+				background: '#000000',
+				color: '#F0F0F0',
+			});
+		}
 	};
 
 	useEffect(() => {
-		onGettingAllCars();
+		fetchCars();
 	}, []);
 
 	if (isLoading) {
