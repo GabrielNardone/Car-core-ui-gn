@@ -1,11 +1,9 @@
 import { ArrowUturnLeftIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import * as yup from 'yup';
 
-import { createCar } from '@/service/api/car/create-car';
-import { uploadCarPicture } from '@/service/api/car/upload-picture';
+import { onCreateCar } from '@/helpers/car/car-helpers';
+import { createCarSchema } from '@/utils/car/validations/car-validations';
 
 const NEW_CAR_INITIAL_STATE = {
 	brand: '',
@@ -21,95 +19,14 @@ const NEW_CAR_INITIAL_STATE = {
 	date: '',
 };
 
-interface IFormData {
-	picture: any;
-	title: string;
-	description: string;
-	type: string;
-	date: string;
-}
-
 export const CarForm = () => {
 	const navigate = useNavigate();
 
-	const fileUpload = (id: number, values: IFormData) => {
-		const formData = new FormData();
-		formData.append('file', values.picture);
-		formData.append('title', values.title);
-		formData.append('description', values.description);
-		formData.append('type', values.type);
-		formData.append('date', values.date);
-
-		uploadCarPicture(id, formData)
-			.then((response) => {
-				if (response.status === 201) {
-					Swal.fire({
-						position: 'top-end',
-						icon: 'success',
-						title: `<span data-cy="create-car-success">Car with id ${id} created!</span>`,
-						showConfirmButton: false,
-						timer: 2500,
-						background: '#000000',
-						color: '#F0F0F0',
-					});
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-
 	const formik = useFormik({
 		initialValues: NEW_CAR_INITIAL_STATE,
-		validationSchema: yup.object({
-			brand: yup
-				.string()
-				.required('Required')
-				.min(3, 'At least (3) characters')
-				.max(21, 'Maximum (21) characters'),
-			model: yup
-				.string()
-				.required('Required')
-				.min(3, 'At least (3) characters')
-				.max(21, 'Maximum (21) characters'),
-			color: yup.string().required('Required'),
-			passengers: yup.number().required('Required'),
-			ac: yup.boolean().required('Required'),
-			pricePerDay: yup
-				.number()
-				.required('Required')
-				.positive('Must be a positive number'),
-			picture: yup.mixed().required('Required'),
-			title: yup
-				.string()
-				.required('Required')
-				.min(3, 'At least (3) characters')
-				.max(21, 'Maximum (21) characters'),
-			description: yup
-				.string()
-				.required('Required')
-				.min(3, 'At least (3) characters')
-				.max(120, 'Maximum (120) characters'),
-			type: yup.string().required('Required'),
-			date: yup.string().required('Required'),
-		}),
-		onSubmit: (values) => {
-			createCar({
-				brand: values.brand,
-				model: values.model,
-				color: values.color,
-				pricePerDay: Number(values.pricePerDay),
-				passengers: Number(values.passengers),
-				ac: values.ac === 'true' ? true : false,
-			}).then((id) => {
-				fileUpload(id, {
-					picture: values.picture[0],
-					title: values.title,
-					description: values.description,
-					type: values.type,
-					date: values.date,
-				});
-			});
+		validationSchema: createCarSchema,
+		onSubmit: async (values) => {
+			onCreateCar(values);
 			formik.resetForm();
 		},
 	});

@@ -3,13 +3,20 @@ import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import * as yup from 'yup';
 
-import { deletePicture } from '@/service/api/car/delete-picture';
-import { editCar } from '@/service/api/car/edit-car';
-import { ICarImages } from '@/service/api/car/get-all-cars';
-import { getCarById } from '@/service/api/car/get-car-by-id';
-import { uploadCarPicture } from '@/service/api/car/upload-picture';
+import {
+	ICarImages,
+	editCar,
+	getCarById,
+} from '@/service/api/car/car-requests';
+import {
+	deletePicture,
+	uploadCarPicture,
+} from '@/service/api/picture/picture-requests';
+import {
+	createPictureSchema,
+	editCarSchema,
+} from '@/utils/car/validations/car-validations';
 
 const NEW_CAR_INITIAL_STATE = {
 	brand: '',
@@ -42,7 +49,7 @@ export const CarEdit = () => {
 	const [carPictures, setCarPictures] = useState<ICarImages[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	const fileUpload = (id: number, values: IFormData) => {
+	const fileUpload = (id: number, values: IFormData): void => {
 		const formData = new FormData();
 		formData.append('file', values.picture);
 		formData.append('title', values.title);
@@ -71,7 +78,7 @@ export const CarEdit = () => {
 			});
 	};
 
-	const onHandleDelete = (id: number) => {
+	const onHandleDelete = (id: number): void => {
 		Swal.fire({
 			title: 'Are you sure?',
 			text: "You won't be able to revert this!",
@@ -104,20 +111,7 @@ export const CarEdit = () => {
 
 	const formikCar = useFormik({
 		initialValues: NEW_CAR_INITIAL_STATE,
-		validationSchema: yup.object({
-			brand: yup
-				.string()
-				.min(3, 'At least (3) characters')
-				.max(21, 'Maximum (21) characters'),
-			model: yup
-				.string()
-				.min(3, 'At least (3) characters')
-				.max(21, 'Maximum (21) characters'),
-			color: yup.string(),
-			passengers: yup.number(),
-			ac: yup.boolean(),
-			pricePerDay: yup.number().positive('Must be a positive number'),
-		}),
+		validationSchema: editCarSchema,
 		onSubmit: (values) => {
 			editCar(carInfo.id, {
 				brand: values.brand || carInfo.brand,
@@ -149,21 +143,7 @@ export const CarEdit = () => {
 
 	const formikCarImages = useFormik({
 		initialValues: NEW_CAR_IMAGES_INITIAL_STATE,
-		validationSchema: yup.object({
-			picture: yup.mixed().required('Required'),
-			title: yup
-				.string()
-				.required('Required')
-				.min(3, 'At least (3) characters')
-				.max(21, 'Maximum (21) characters'),
-			description: yup
-				.string()
-				.required('Required')
-				.min(3, 'At least (3) characters')
-				.max(120, 'Maximum (120) characters'),
-			type: yup.string().required('Required'),
-			date: yup.string().required('Required'),
-		}),
+		validationSchema: createPictureSchema,
 		onSubmit: (values) => {
 			fileUpload(carInfo.id, {
 				picture: values.picture[0],
@@ -177,11 +157,14 @@ export const CarEdit = () => {
 		},
 	});
 
+	const onGettingCarById = async (): Promise<void> => {
+		const car = await getCarById(carInfo.id);
+		setCarPictures(car.images || []);
+		setIsLoading(false);
+	};
+
 	useEffect(() => {
-		getCarById(carInfo.id).then((resp) => {
-			setCarPictures(resp || []);
-			setIsLoading(false);
-		});
+		onGettingCarById();
 	}, [carInfo.id]);
 
 	return (
@@ -412,7 +395,10 @@ export const CarEdit = () => {
 							<h2 className="text-base font-semibold leading-7 text-white col-span-full">
 								Delete current images or add new ones
 							</h2>
-							<div className="col-span-full grid grid-cols-2 gap-3">
+							<div
+								data-cy="car-edit-images-div"
+								className="col-span-full grid grid-cols-2 gap-3"
+							>
 								{isLoading ? (
 									<span className="text-white">Loading...</span>
 								) : (
@@ -424,6 +410,7 @@ export const CarEdit = () => {
 												alt="car-image"
 											/>
 											<button
+												data-cy="car-edit-delete-image"
 												className="text-white justify-self-end hover:text-red-500"
 												onClick={() => onHandleDelete(picture.id)}
 											>

@@ -1,35 +1,41 @@
-import { PhotoIcon } from '@heroicons/react/24/outline';
-import { TrashIcon } from '@heroicons/react/24/solid';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
-import { Carousel } from '@/components/admin/car/Carousel';
-import { GalleryModal } from '@/components/admin/car/GalleryModal';
-import { deleteCar } from '@/service/api/car/delete-car';
-import { ICars, getAllCars } from '@/service/api/car/get-all-cars';
+import { CarTable } from '@/components/admin/car/CarTable';
+import { ICars, deleteCar, getAllCars } from '@/service/api/car/car-requests';
 
 export const CarPage = () => {
-	const [cars, setCars] = useState<ICars[]>();
+	const [cars, setCars] = useState<ICars[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	const [isOpen, setIsOpen] = useState(false);
+	const [showGallery, setShowGallery] = useState(false);
 
 	const onCloseModal = () => {
-		setIsOpen(false);
+		setShowGallery(false);
+	};
+
+	const handleDeleteCar = async (carId: number): Promise<void> => {
+		await deleteCar(carId);
+		setCars((prevCars) => prevCars?.filter((car) => car.id !== carId));
+	};
+
+	const onGettingAllCars = async () => {
+		const cars = await getAllCars();
+		setCars(cars);
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
-		getAllCars().then((resp) => {
-			setCars(resp);
-			setIsLoading(false);
-		});
+		onGettingAllCars();
 	}, []);
 
-	const handleDeleteCar = async (carId: number) => {
-		deleteCar(carId);
-		setCars((prevCars) => prevCars?.filter((car) => car.id !== carId));
-	};
+	if (isLoading) {
+		return (
+			<div className="w-full grid place-content-center text-white text-xl">
+				Loading...
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex-1">
@@ -57,144 +63,13 @@ export const CarPage = () => {
 						<div className="mt-8 flow-root">
 							<div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 								<div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-									<table className="min-w-full divide-y divide-gray-700">
-										<thead>
-											<tr>
-												<th
-													scope="col"
-													className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0"
-												>
-													Brand
-												</th>
-												<th
-													scope="col"
-													className="px-3 py-3.5 text-left text-sm font-semibold text-white"
-												>
-													Model
-												</th>
-												<th
-													scope="col"
-													className="px-3 py-3.5 text-left text-sm font-semibold text-white"
-												>
-													Color
-												</th>
-												<th
-													scope="col"
-													className="px-3 py-3.5 text-left text-sm font-semibold text-white"
-												>
-													Price Per Day
-												</th>
-												<th
-													scope="col"
-													className="px-3 py-3.5 text-left text-sm font-semibold text-white"
-												>
-													Pictures
-												</th>
-												<th
-													scope="col"
-													className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-												>
-													<span className="sr-only">Edit</span>
-												</th>
-												<th
-													scope="col"
-													className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-												>
-													<span className="sr-only">Delete</span>
-												</th>
-											</tr>
-										</thead>
-										<tbody className="divide-y divide-gray-800">
-											{isLoading ? (
-												<tr className="text-white">
-													<td>Loading...</td>
-												</tr>
-											) : (
-												cars?.map((car) => (
-													<tr key={car.id} data-cy="car-table">
-														<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
-															{car.brand}
-														</td>
-														<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-															{car.model}
-														</td>
-														<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-															{car.color}
-														</td>
-														<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-															{car.pricePerDay}
-														</td>
-														<td className="flex whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-															<button
-																onClick={() => setIsOpen(true)}
-																className="text-indigo-400 hover:text-indigo-300"
-															>
-																See gallery
-															</button>
-															<PhotoIcon className="w-6 ml-2" />
-															<GalleryModal
-																isOpen={isOpen}
-																onCloseModal={onCloseModal}
-															>
-																<Carousel images={car.images} />
-															</GalleryModal>
-														</td>
-														<td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-															<Link
-																data-cy={`edit-car-${car.id}`}
-																to={`/admin/car-edit/${car.id}`}
-																state={{
-																	id: car.id,
-																	brand: car.brand,
-																	model: car.model,
-																	color: car.color,
-																	pricePerDay: car.pricePerDay,
-																	ac: car.ac,
-																	passengers: car.passengers,
-																}}
-																className="text-indigo-400 hover:text-indigo-300"
-															>
-																Edit
-															</Link>
-														</td>
-														<td className="relative whitespace-nowrap py-4 pl-6 pr-4 text-right text-sm font-medium sm:pr-0">
-															<TrashIcon
-																data-cy="delete-car"
-																className="text-white w-6 hover:text-red-400 hover:cursor-pointer"
-																onClick={() => {
-																	Swal.fire({
-																		title: 'Are you sure?',
-																		text: "You won't be able to revert this!",
-																		background: '#000000',
-																		color: '#F0F0F0',
-																		showCancelButton: true,
-																		confirmButtonColor: '#17B169',
-																		cancelButtonColor: '#d33',
-																		confirmButtonText:
-																			'<span data-cy="confirm-delete">Yes, delete it!</span>',
-																	}).then((result) => {
-																		if (result.isConfirmed) {
-																			handleDeleteCar(car.id);
-																			Swal.fire({
-																				title: 'Deleted!',
-																				text: 'Your car has been deleted.',
-																				icon: 'success',
-																				background: '#000000',
-																				color: '#F0F0F0',
-																				confirmButtonColor: '#17B169',
-																				confirmButtonText:
-																					'<span data-cy="close-delete-alert">Ok</span>',
-																			});
-																		}
-																	});
-																}}
-															/>
-														</td>
-													</tr>
-												))
-											)}
-										</tbody>
-									</table>
+									<CarTable
+										cars={cars}
+										handleDeleteCar={handleDeleteCar}
+										showGallery={showGallery}
+										onCloseModal={onCloseModal}
+										setShowGallery={setShowGallery}
+									/>
 								</div>
 							</div>
 						</div>
