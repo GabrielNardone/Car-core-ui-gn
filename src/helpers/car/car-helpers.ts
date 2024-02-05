@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-import { createCar } from '@/service/api/car/car-requests';
+import { ICarImages, createCar } from '@/service/api/car/car-requests';
 import { uploadCarPicture } from '@/service/api/picture/picture-requests';
 
 interface IFormData {
@@ -25,7 +25,11 @@ interface ICarDto {
 	date: string;
 }
 
-export const fileUpload = (id: number, values: IFormData): void => {
+export const fileUpload = async (
+	id: number,
+	values: IFormData,
+	message: string,
+): Promise<ICarImages> => {
 	const formData = new FormData();
 	formData.append('file', values.picture);
 	formData.append('title', values.title);
@@ -33,29 +37,32 @@ export const fileUpload = (id: number, values: IFormData): void => {
 	formData.append('type', values.type);
 	formData.append('date', values.date);
 
-	uploadCarPicture(id, formData)
-		.then((response) => {
-			if (response.status === 201) {
-				Swal.fire({
-					position: 'top-end',
-					icon: 'success',
-					title: `<span data-cy="create-car-success">Car with id ${id} created!</span>`,
-					showConfirmButton: false,
-					timer: 2500,
-					background: '#000000',
-					color: '#F0F0F0',
-				});
-			}
-		})
-		.catch((error) => {
-			console.log(error);
+	try {
+		const response = await uploadCarPicture(id, formData);
+
+		if (response.status === 201) {
 			Swal.fire({
-				icon: 'error',
-				title: `<span data-cy="create-picture-error-alert">${error}</span>`,
+				position: 'top-end',
+				icon: 'success',
+				title: `<span data-cy="create-car-success">${message}</span>`,
+				showConfirmButton: false,
+				timer: 2500,
 				background: '#000000',
 				color: '#F0F0F0',
 			});
+		}
+
+		return response.data;
+	} catch (error: unknown) {
+		console.log(error);
+		Swal.fire({
+			icon: 'error',
+			title: `<span data-cy="create-picture-error-alert">${error}</span>`,
+			background: '#000000',
+			color: '#F0F0F0',
 		});
+		throw error;
+	}
 };
 
 export const onCreateCar = async (values: ICarDto): Promise<void> => {
@@ -68,13 +75,17 @@ export const onCreateCar = async (values: ICarDto): Promise<void> => {
 			passengers: Number(values.passengers),
 			ac: values.ac === 'true' ? true : false,
 		});
-		fileUpload(id, {
-			picture: values.picture[0],
-			title: values.title,
-			description: values.description,
-			type: values.type,
-			date: values.date,
-		});
+		fileUpload(
+			id,
+			{
+				picture: values.picture[0],
+				title: values.title,
+				description: values.description,
+				type: values.type,
+				date: values.date,
+			},
+			`Car with id ${id} created!`,
+		);
 	} catch (error: unknown) {
 		console.log(error);
 		Swal.fire({

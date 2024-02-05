@@ -240,7 +240,7 @@ describe('Car table edit', () => {
 
 		cy.get('[data-cy=car-edit-new-image-form]').submit();
 
-		cy.get('[data-cy=add-new-image]').should('be.visible');
+		cy.get('[data-cy=create-car-success]').should('be.visible');
 	});
 
 	it('Should display error when uploading a new car image', () => {

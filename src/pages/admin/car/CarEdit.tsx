@@ -4,15 +4,13 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
+import { fileUpload } from '@/helpers/car/car-helpers';
 import {
 	ICarImages,
 	editCar,
 	getCarById,
 } from '@/service/api/car/car-requests';
-import {
-	deletePicture,
-	uploadCarPicture,
-} from '@/service/api/picture/picture-requests';
+import { deletePicture } from '@/service/api/picture/picture-requests';
 import {
 	createPictureSchema,
 	editCarSchema,
@@ -34,14 +32,6 @@ const NEW_CAR_IMAGES_INITIAL_STATE = {
 	date: '',
 };
 
-interface IFormData {
-	picture: any;
-	title: string;
-	description: string;
-	type: string;
-	date: string;
-}
-
 export const CarEdit = () => {
 	const { state: carInfo } = useLocation();
 	const navigate = useNavigate();
@@ -49,40 +39,40 @@ export const CarEdit = () => {
 	const [carPictures, setCarPictures] = useState<ICarImages[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	const fileUpload = (id: number, values: IFormData): void => {
-		const formData = new FormData();
-		formData.append('file', values.picture);
-		formData.append('title', values.title);
-		formData.append('description', values.description);
-		formData.append('type', values.type);
-		formData.append('date', values.date);
+	// const fileUpload = (id: number, values: IFormData): void => {
+	// 	const formData = new FormData();
+	// 	formData.append('file', values.picture);
+	// 	formData.append('title', values.title);
+	// 	formData.append('description', values.description);
+	// 	formData.append('type', values.type);
+	// 	formData.append('date', values.date);
 
-		uploadCarPicture(id, formData)
-			.then((resp) => {
-				if (resp.status === 201) {
-					Swal.fire({
-						position: 'top-end',
-						icon: 'success',
-						title: `<span data-cy="add-new-image">New image saved on ${carInfo.brand} ${carInfo.model} (ID:${carInfo.id})</span>`,
-						showConfirmButton: false,
-						timer: 2500,
-						background: '#000000',
-						color: '#F0F0F0',
-					});
+	// 	uploadCarPicture(id, formData)
+	// 		.then((resp) => {
+	// 			if (resp.status === 201) {
+	// 				Swal.fire({
+	// 					position: 'top-end',
+	// 					icon: 'success',
+	// 					title: `<span data-cy="add-new-image">New image saved on ${carInfo.brand} ${carInfo.model} (ID:${carInfo.id})</span>`,
+	// 					showConfirmButton: false,
+	// 					timer: 2500,
+	// 					background: '#000000',
+	// 					color: '#F0F0F0',
+	// 				});
 
-					setCarPictures([...carPictures, resp.data]);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-				Swal.fire({
-					icon: 'error',
-					title: `<span data-cy="create-picture-error-alert">${error}</span>`,
-					background: '#000000',
-					color: '#F0F0F0',
-				});
-			});
-	};
+	// 				setCarPictures([...carPictures, resp.data]);
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			console.log(error);
+	// 			Swal.fire({
+	// 				icon: 'error',
+	// 				title: `<span data-cy="create-picture-error-alert">${error}</span>`,
+	// 				background: '#000000',
+	// 				color: '#F0F0F0',
+	// 			});
+	// 		});
+	// };
 
 	const onHandleDelete = (id: number): void => {
 		Swal.fire({
@@ -118,31 +108,28 @@ export const CarEdit = () => {
 	const formikCar = useFormik({
 		initialValues: NEW_CAR_INITIAL_STATE,
 		validationSchema: editCarSchema,
-		onSubmit: (values) => {
-			editCar(carInfo.id, {
+		onSubmit: async (values) => {
+			const status = await editCar(carInfo.id, {
 				brand: values.brand || carInfo.brand,
 				model: values.model || carInfo.model,
 				color: values.color || carInfo.color,
 				pricePerDay: Number(values.pricePerDay) || carInfo.pricePerDay,
 				passengers: Number(values.passengers) || carInfo.passengers,
 				ac: values.ac === 'true' ? true : false || carInfo.ac,
-			})
-				.then((status) => {
-					if (status === 202) {
-						Swal.fire({
-							position: 'top-end',
-							icon: 'success',
-							title: `<span data-cy="car-edit-success">${carInfo.brand} ${carInfo.model} (ID:${carInfo.id}) updated!</span>`,
-							showConfirmButton: false,
-							timer: 2500,
-							background: '#000000',
-							color: '#F0F0F0',
-						});
-					}
-				})
-				.catch((error) => {
-					console.log(error);
+			});
+
+			if (status === 202) {
+				Swal.fire({
+					position: 'top-end',
+					icon: 'success',
+					title: `<span data-cy="car-edit-success">${carInfo.brand} ${carInfo.model} (ID:${carInfo.id}) updated!</span>`,
+					showConfirmButton: false,
+					timer: 2500,
+					background: '#000000',
+					color: '#F0F0F0',
 				});
+			}
+
 			formikCar.resetForm();
 		},
 	});
@@ -150,14 +137,22 @@ export const CarEdit = () => {
 	const formikCarImages = useFormik({
 		initialValues: NEW_CAR_IMAGES_INITIAL_STATE,
 		validationSchema: createPictureSchema,
-		onSubmit: (values) => {
-			fileUpload(carInfo.id, {
-				picture: values.picture[0],
-				title: values.title,
-				description: values.description,
-				type: values.type,
-				date: values.date,
-			});
+		onSubmit: async (values) => {
+			const picture = await fileUpload(
+				carInfo.id,
+				{
+					picture: values.picture[0],
+					title: values.title,
+					description: values.description,
+					type: values.type,
+					date: values.date,
+				},
+				`New image saved on ${carInfo.brand} ${carInfo.model} (ID:${carInfo.id})`,
+			);
+
+			if (picture) {
+				setCarPictures([...carPictures, picture]);
+			}
 
 			formikCarImages.resetForm();
 		},
@@ -181,7 +176,7 @@ export const CarEdit = () => {
 
 	useEffect(() => {
 		onGettingCarById();
-	}, [carInfo.id]);
+	});
 
 	return (
 		<div className="flex flex-col flex-1">
