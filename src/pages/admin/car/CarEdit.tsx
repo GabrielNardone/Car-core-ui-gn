@@ -39,41 +39,6 @@ export const CarEdit = () => {
 	const [carPictures, setCarPictures] = useState<ICarImages[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	// const fileUpload = (id: number, values: IFormData): void => {
-	// 	const formData = new FormData();
-	// 	formData.append('file', values.picture);
-	// 	formData.append('title', values.title);
-	// 	formData.append('description', values.description);
-	// 	formData.append('type', values.type);
-	// 	formData.append('date', values.date);
-
-	// 	uploadCarPicture(id, formData)
-	// 		.then((resp) => {
-	// 			if (resp.status === 201) {
-	// 				Swal.fire({
-	// 					position: 'top-end',
-	// 					icon: 'success',
-	// 					title: `<span data-cy="add-new-image">New image saved on ${carInfo.brand} ${carInfo.model} (ID:${carInfo.id})</span>`,
-	// 					showConfirmButton: false,
-	// 					timer: 2500,
-	// 					background: '#000000',
-	// 					color: '#F0F0F0',
-	// 				});
-
-	// 				setCarPictures([...carPictures, resp.data]);
-	// 			}
-	// 		})
-	// 		.catch((error) => {
-	// 			console.log(error);
-	// 			Swal.fire({
-	// 				icon: 'error',
-	// 				title: `<span data-cy="create-picture-error-alert">${error}</span>`,
-	// 				background: '#000000',
-	// 				color: '#F0F0F0',
-	// 			});
-	// 		});
-	// };
-
 	const onHandleDelete = (id: number): void => {
 		Swal.fire({
 			title: 'Are you sure?',
