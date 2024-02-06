@@ -10,8 +10,20 @@ export const CarPage = () => {
 	const [isLoading, setIsLoading] = useState(true);
 
 	const handleDeleteCar = async (carId: number): Promise<void> => {
-		await deleteCar(carId);
-		setCars((prevCars) => prevCars?.filter((car) => car.id !== carId));
+		try {
+			await deleteCar(carId);
+			notifyStatus(
+				NOTIFICATION_TYPE.DELETED,
+				'<span data-cy="close-car-table-delete-alert">Ok</span>',
+			);
+			setCars((prevCars) => prevCars?.filter((car) => car.id !== carId));
+		} catch (error) {
+			console.log(error);
+			notifyStatus(
+				NOTIFICATION_TYPE.ERROR,
+				`<span data-cy="car-table-delete-error">${error}</span>`,
+			);
+		}
 	};
 
 	const fetchCars = async () => {

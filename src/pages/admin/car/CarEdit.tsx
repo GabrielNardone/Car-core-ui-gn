@@ -59,11 +59,28 @@ export const CarEdit = () => {
 	const [carPictures, setCarPictures] = useState<ICarPicture[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
+	const handleDeletePicture = async (pictureId: number): Promise<void> => {
+		try {
+			await deletePicture(pictureId);
+			notifyStatus(
+				NOTIFICATION_TYPE.DELETED,
+				'<span data-cy="close-car-edit-delete-picutre-alert">Ok</span>',
+			);
+			setCarPictures((prevPictures) =>
+				prevPictures?.filter((picture) => picture.id !== pictureId),
+			);
+		} catch (error) {
+			console.log(error);
+			notifyStatus(
+				NOTIFICATION_TYPE.ERROR,
+				`<span data-cy="car-edit-delete-picture-error">${error}</span>`,
+			);
+		}
+	};
 	const onHandleDelete = (id: number): void => {
 		notifyConfirmation(
 			'<span data-cy="confirm-picture-delete-alert">Yes, delete it!</span>',
-			'<span data-cy="close-picture-delete-alert">Ok</span>',
-			deletePicture,
+			handleDeletePicture,
 			id,
 		);
 	};
@@ -107,7 +124,7 @@ export const CarEdit = () => {
 
 			notifyStatus(
 				NOTIFICATION_TYPE.SUCCESS,
-				`<span data-cy="car-edit-create-picture-success">New image saved on ${carInfo.brand} ${carInfo.model} (ID:${carInfo.id})</span>`,
+				`<span data-cy="car-edit-create-picture-success">New picture saved on ${carInfo.brand} ${carInfo.model} (ID:${carInfo.id})</span>`,
 			);
 		} catch (error) {
 			console.log(error);
@@ -146,14 +163,14 @@ export const CarEdit = () => {
 			console.log(error);
 			notifyStatus(
 				NOTIFICATION_TYPE.ERROR,
-				`<span data-cy="get-car-images-error-alert">${error}</span>`,
+				`<span data-cy="get-car-pictures-error-alert">${error}</span>`,
 			);
 		}
 	};
 
 	useEffect(() => {
 		fetchCarById();
-	});
+	}, []);
 
 	return (
 		<div className="flex flex-col flex-1">
@@ -197,7 +214,7 @@ export const CarEdit = () => {
 
 								<div className="mt-2">
 									<input
-										data-cy="brand"
+										data-cy="car-edit-brand"
 										id="brand"
 										type="text"
 										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
@@ -220,7 +237,7 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<input
-										data-cy="model"
+										data-cy="car-edit-model"
 										id="model"
 										type="text"
 										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
@@ -243,7 +260,7 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<select
-										data-cy="color"
+										data-cy="car-edit-color"
 										id="color"
 										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
 										{...formikCar.getFieldProps('color')}
@@ -274,8 +291,8 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<select
+										data-cy="car-edit-passengers"
 										typeof="number"
-										data-cy="passengers"
 										id="passengers"
 										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
 										{...formikCar.getFieldProps('passengers')}
@@ -307,7 +324,7 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<select
-										data-cy="ac"
+										data-cy="car-edit-ac"
 										id="ac"
 										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
 										{...formikCar.getFieldProps('ac')}
@@ -335,7 +352,7 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<input
-										data-cy="pricePerDay"
+										data-cy="car-edit-pricePerDay"
 										type="number"
 										id="pricePerDay"
 										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
@@ -375,7 +392,7 @@ export const CarEdit = () => {
 				className="p-6 pt-0"
 				onSubmit={formikCarPictures.handleSubmit}
 				noValidate
-				data-cy="car-edit-new-image-form"
+				data-cy="car-edit-new-picture-form"
 			>
 				<div>
 					<div className="border-b border-white/10 pb-12">
@@ -384,7 +401,7 @@ export const CarEdit = () => {
 								Delete current images or add new ones
 							</h2>
 							<div
-								data-cy="car-edit-images-div"
+								data-cy="car-edit-pictures-div"
 								className="col-span-full grid grid-cols-2 gap-3"
 							>
 								{isLoading ? (
@@ -398,7 +415,7 @@ export const CarEdit = () => {
 												alt="car-image"
 											/>
 											<button
-												data-cy="car-edit-delete-image"
+												data-cy="car-edit-delete-picture"
 												className="text-white justify-self-end hover:text-red-500"
 												onClick={() => onHandleDelete(picture.id)}
 											>
@@ -425,7 +442,7 @@ export const CarEdit = () => {
 											>
 												<span>Upload a file</span>
 												<input
-													data-cy="picture"
+													data-cy="car-edit-picture"
 													id="picture"
 													name="picture"
 													type="file"
@@ -446,7 +463,10 @@ export const CarEdit = () => {
 								</div>
 								{formikCarPictures.touched.picture &&
 									formikCarPictures.errors.picture && (
-										<p data-cy="picture-error" className="text-red-500">
+										<p
+											data-cy="car-edit-picture-error"
+											className="text-red-500"
+										>
 											{formikCarPictures.errors.picture as string}
 										</p>
 									)}
@@ -463,7 +483,7 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<input
-										data-cy="car-edit-pictureTitle"
+										data-cy="car-edit-picture-title"
 										id="pictureTitle"
 										type="text"
 										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
@@ -487,7 +507,7 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<input
-										data-cy="car-edit-pictureDescription"
+										data-cy="car-edit-picture-description"
 										id="pictureDescription"
 										type="text"
 										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
@@ -514,7 +534,7 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<select
-										data-cy="car-edit-pictureType"
+										data-cy="car-edit-picture-type"
 										id="pictureType"
 										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
 										{...formikCarPictures.getFieldProps('pictureType')}
@@ -548,7 +568,7 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<input
-										data-cy="car-edit-pictureDate"
+										data-cy="car-edit-picture-date"
 										id="pictureDate"
 										type="date"
 										className="block w-full rounded-md border-0 bg-white/5 px-4 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"

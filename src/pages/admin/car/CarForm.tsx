@@ -85,7 +85,7 @@ export const CarForm = () => {
 			className="flex-1 p-6"
 			onSubmit={formik.handleSubmit}
 			noValidate
-			data-cy="car-form"
+			data-cy="car-create-form"
 		>
 			<div className="space-y-10">
 				<div className="border-b border-white/10 pb-8">
@@ -120,14 +120,14 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="brand"
+									data-cy="car-create-brand"
 									id="brand"
 									type="text"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('brand')}
 								/>
 								{formik.touched.brand && formik.errors.brand && (
-									<p data-cy="brand-error" className="text-red-500">
+									<p data-cy="car-create-brand-error" className="text-red-500">
 										{formik.errors.brand}
 									</p>
 								)}
@@ -143,14 +143,14 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="model"
+									data-cy="car-create-model"
 									id="model"
 									type="text"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('model')}
 								/>
 								{formik.touched.model && formik.errors.model && (
-									<p data-cy="model-error" className="text-red-500">
+									<p data-cy="car-create-model-error" className="text-red-500">
 										{formik.errors.model}
 									</p>
 								)}
@@ -166,7 +166,7 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<select
-									data-cy="color"
+									data-cy="car-create-color"
 									id="color"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
 									{...formik.getFieldProps('color')}
@@ -181,7 +181,7 @@ export const CarForm = () => {
 									<option value={'red'}>Red</option>
 								</select>
 								{formik.touched.color && formik.errors.color && (
-									<p data-cy="color-error" className="text-red-500">
+									<p data-cy="car-create-color-error" className="text-red-500">
 										{formik.errors.color}
 									</p>
 								)}
@@ -198,7 +198,7 @@ export const CarForm = () => {
 							<div className="mt-2">
 								<select
 									typeof="number"
-									data-cy="passengers"
+									data-cy="car-create-passengers"
 									id="passengers"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
 									{...formik.getFieldProps('passengers')}
@@ -213,7 +213,10 @@ export const CarForm = () => {
 									<option value={8}>8</option>
 								</select>
 								{formik.touched.passengers && formik.errors.passengers && (
-									<p data-cy="passengers-error" className="text-red-500">
+									<p
+										data-cy="car-create-passengers-error"
+										className="text-red-500"
+									>
 										{formik.errors.passengers}
 									</p>
 								)}
@@ -229,7 +232,7 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<select
-									data-cy="ac"
+									data-cy="car-create-ac"
 									id="ac"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
 									{...formik.getFieldProps('ac')}
@@ -241,7 +244,7 @@ export const CarForm = () => {
 									<option value={'false'}>No</option>
 								</select>
 								{formik.touched.ac && formik.errors.ac && (
-									<p data-cy="ac-error" className="text-red-500">
+									<p data-cy="car-create-ac-error" className="text-red-500">
 										{formik.errors.ac}
 									</p>
 								)}
@@ -257,14 +260,17 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="pricePerDay"
+									data-cy="car-create-pricePerDay"
 									type="number"
 									id="pricePerDay"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('pricePerDay')}
 								/>
 								{formik.touched.pricePerDay && formik.errors.pricePerDay && (
-									<p data-cy="pricePerDay-error" className="text-red-500">
+									<p
+										data-cy="car-create-pricePerDay-error"
+										className="text-red-500"
+									>
 										{formik.errors.pricePerDay}
 									</p>
 								)}
@@ -307,7 +313,7 @@ export const CarForm = () => {
 								</div>
 							</div>
 							{formik.touched.picture && formik.errors.picture && (
-								<p data-cy="picture-error" className="text-red-500">
+								<p data-cy="car-create-picture-error" className="text-red-500">
 									{formik.errors.picture as string}
 								</p>
 							)}
@@ -324,14 +330,17 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="pictureTitle"
+									data-cy="car-create-picture-title"
 									id="pictureTitle"
 									type="text"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('pictureTitle')}
 								/>
 								{formik.touched.pictureTitle && formik.errors.pictureTitle && (
-									<p data-cy="title-error" className="text-red-500">
+									<p
+										data-cy="car-create-picture-title-error"
+										className="text-red-500"
+									>
 										{formik.errors.pictureTitle}
 									</p>
 								)}
@@ -347,7 +356,7 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="pictureDescription"
+									data-cy="car-create-picture-description"
 									id="pictureDescription"
 									type="text"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
@@ -355,7 +364,10 @@ export const CarForm = () => {
 								/>
 								{formik.touched.pictureDescription &&
 									formik.errors.pictureDescription && (
-										<p data-cy="description-error" className="text-red-500">
+										<p
+											data-cy="car-create-picture-description-error"
+											className="text-red-500"
+										>
 											{formik.errors.pictureDescription}
 										</p>
 									)}
@@ -371,7 +383,7 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<select
-									data-cy="pictureType"
+									data-cy="car-create-picture-type"
 									id="pictureType"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
 									{...formik.getFieldProps('pictureType')}
@@ -385,7 +397,10 @@ export const CarForm = () => {
 									<option value={'other'}>Other</option>
 								</select>
 								{formik.touched.pictureType && formik.errors.pictureType && (
-									<p data-cy="type-error" className="text-red-500">
+									<p
+										data-cy="car-create-picture-type-error"
+										className="text-red-500"
+									>
 										{formik.errors.pictureType}
 									</p>
 								)}
@@ -401,14 +416,17 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="pictureDate"
+									data-cy="car-create-picture-date"
 									id="pictureDate"
 									type="date"
 									className="block w-full rounded-md border-0 bg-white/5 px-4 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('pictureDate')}
 								/>
 								{formik.touched.pictureDate && formik.errors.pictureDate && (
-									<p data-cy="date-error" className="text-red-500">
+									<p
+										data-cy="car-create-picture-date-error"
+										className="text-red-500"
+									>
 										{formik.errors.pictureDate}
 									</p>
 								)}

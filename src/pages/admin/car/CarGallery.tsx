@@ -26,7 +26,10 @@ export const CarGallery = () => {
 					</button>
 				</div>
 			</div>
-			<div className="flex flex-col items-center gap-y-4 mt-4">
+			<div
+				data-cy="car-gallery-div"
+				className="flex flex-col items-center gap-y-4 mt-4"
+			>
 				{carData.pictures.length === 0 ? (
 					<div className="w-full grid place-content-center text-white text-xl">
 						<p>No pictures</p>
@@ -36,6 +39,7 @@ export const CarGallery = () => {
 					carData.pictures.map((carPicture: ICarPicture) => (
 						<div key={carPicture.id} className="w-[50%]">
 							<img
+								data-cy={`car-picture-${carPicture.id}`}
 								src={carPicture.src ? carPicture.src : 'no-image.jpg'}
 								alt="car-picture"
 								className="rounded-lg w-full h-96 object-cover hover:scale-110 ease-in duration-300 hover:border hover:border-indigo-700"

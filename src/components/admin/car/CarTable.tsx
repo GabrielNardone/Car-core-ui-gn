@@ -116,12 +116,11 @@ export const CarTable = ({ cars, handleDeleteCar }: ICarTable) => {
 						</td>
 						<td className="relative whitespace-nowrap py-4 pl-6 pr-4 text-right text-sm font-medium sm:pr-0">
 							<TrashIcon
-								data-cy="delete-car"
+								data-cy="car-table-delete-car"
 								className="text-white w-6 hover:text-red-400 hover:cursor-pointer"
 								onClick={() => {
 									notifyConfirmation(
 										'<span data-cy="confirm-car-delete-alert">Yes, delete it!</span>',
-										'<span data-cy="close-car-delete-alert">Ok</span>',
 										handleDeleteCar,
 										car.id,
 									);

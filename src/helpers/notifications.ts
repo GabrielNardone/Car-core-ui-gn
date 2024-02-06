@@ -4,6 +4,7 @@ export enum NOTIFICATION_TYPE {
 	SUCCESS = 'success',
 	ERROR = 'error',
 	WARNING = 'warning',
+	DELETED = 'deleted',
 }
 export const notifyStatus = (
 	type: NOTIFICATION_TYPE,
@@ -36,12 +37,21 @@ export const notifyStatus = (
 				background: '#000000',
 				color: '#F0F0F0',
 			});
+		case NOTIFICATION_TYPE.DELETED:
+			return Swal.fire({
+				title: 'Deleted!',
+				text: 'Your car has been deleted.',
+				icon: 'success',
+				background: '#000000',
+				color: '#F0F0F0',
+				confirmButtonColor: '#17B169',
+				confirmButtonText: message,
+			});
 	}
 };
 
 export const notifyConfirmation = (
 	confirmButtonText: string,
-	closeButtonText: string,
 	callback: (id: number) => void,
 	id: number,
 ) => {
@@ -57,15 +67,6 @@ export const notifyConfirmation = (
 	}).then((result) => {
 		if (result.isConfirmed) {
 			callback(id);
-			Swal.fire({
-				title: 'Deleted!',
-				text: 'Your car has been deleted.',
-				icon: 'success',
-				background: '#000000',
-				color: '#F0F0F0',
-				confirmButtonColor: '#17B169',
-				confirmButtonText: closeButtonText,
-			});
 		}
 	});
 };
