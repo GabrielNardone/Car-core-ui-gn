@@ -5,10 +5,10 @@ import {
 } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 
-import { ICarImages } from '@/service/api/car/car-requests';
+import { ICarPicture } from '@/services/api/picture/picture';
 
 interface ICarousel {
-	images: ICarImages[];
+	images: ICarPicture[];
 }
 
 export const Carousel = ({ images }: ICarousel) => {
@@ -34,7 +34,7 @@ export const Carousel = ({ images }: ICarousel) => {
 				style={{ transform: `translate(-${activeIndex * 100}%)` }}
 			>
 				{!images || images.length === 0 ? (
-					<img src="/no-image.jpg" alt="no image" className="w-full" />
+					<img src="/no-image.jpg" alt="no image" className="h-full w-full" />
 				) : (
 					images.map((img) => (
 						<img

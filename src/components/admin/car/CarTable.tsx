@@ -1,15 +1,15 @@
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
 import { Carousel } from './Carousel';
 import { GalleryModal } from './GalleryModal';
 
-import { ICars } from '@/service/api/car/car-requests';
+import { notifyConfirmation } from '@/helpers/notifications';
+import { ICar } from '@/services/api/car/car';
 
 interface ICarTable {
-	cars: ICars[];
+	cars: ICar[];
 	handleDeleteCar: (carId: number) => Promise<void>;
 	showGallery: boolean;
 	onCloseModal: () => void;
@@ -27,6 +27,12 @@ export const CarTable = ({
 		<table className="min-w-full divide-y divide-gray-700">
 			<thead>
 				<tr>
+					<th
+						scope="col"
+						className="px-3 py-3.5 text-left text-sm font-semibold text-white"
+					>
+						ID
+					</th>
 					<th
 						scope="col"
 						className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0"
@@ -68,6 +74,9 @@ export const CarTable = ({
 			<tbody className="divide-y divide-gray-800">
 				{cars?.map((car) => (
 					<tr key={car.id} data-cy="car-table">
+						<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+							{car.id}
+						</td>
 						<td
 							data-cy={`car-brand-${car.id}`}
 							className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"
@@ -119,31 +128,12 @@ export const CarTable = ({
 								data-cy="delete-car"
 								className="text-white w-6 hover:text-red-400 hover:cursor-pointer"
 								onClick={() => {
-									Swal.fire({
-										title: 'Are you sure?',
-										text: "You won't be able to revert this!",
-										background: '#000000',
-										color: '#F0F0F0',
-										showCancelButton: true,
-										confirmButtonColor: '#17B169',
-										cancelButtonColor: '#d33',
-										confirmButtonText:
-											'<span data-cy="confirm-delete">Yes, delete it!</span>',
-									}).then((result) => {
-										if (result.isConfirmed) {
-											handleDeleteCar(car.id);
-											Swal.fire({
-												title: 'Deleted!',
-												text: 'Your car has been deleted.',
-												icon: 'success',
-												background: '#000000',
-												color: '#F0F0F0',
-												confirmButtonColor: '#17B169',
-												confirmButtonText:
-													'<span data-cy="close-delete-alert">Ok</span>',
-											});
-										}
-									});
+									notifyConfirmation(
+										'<span data-cy="confirm-delete">Yes, delete it!</span>',
+										'<span data-cy="close-delete-alert">Ok</span>',
+										handleDeleteCar,
+										car.id,
+									);
 								}}
 							/>
 						</td>

@@ -33,18 +33,18 @@ export const createCarSchema = yup.object({
 				return true;
 			},
 		),
-	title: yup
+	pictureTitle: yup
 		.string()
 		.required('Required')
 		.min(3, 'At least (3) characters')
 		.max(21, 'Maximum (21) characters'),
-	description: yup
+	pictureDescription: yup
 		.string()
 		.required('Required')
 		.min(3, 'At least (3) characters')
 		.max(120, 'Maximum (120) characters'),
-	type: yup.string().required('Required'),
-	date: yup.string().required('Required'),
+	pictureType: yup.string().required('Required'),
+	pictureDate: yup.string().required('Required'),
 });
 
 export const editCarSchema = yup.object({
@@ -64,16 +64,16 @@ export const editCarSchema = yup.object({
 
 export const createPictureSchema = yup.object({
 	picture: yup.mixed().required('Required'),
-	title: yup
+	pictureTitle: yup
 		.string()
 		.required('Required')
 		.min(3, 'At least (3) characters')
 		.max(21, 'Maximum (21) characters'),
-	description: yup
+	pictureDescription: yup
 		.string()
 		.required('Required')
 		.min(3, 'At least (3) characters')
 		.max(120, 'Maximum (120) characters'),
-	type: yup.string().required('Required'),
-	date: yup.string().required('Required'),
+	pictureType: yup.string().required('Required'),
+	pictureDate: yup.string().required('Required'),
 });

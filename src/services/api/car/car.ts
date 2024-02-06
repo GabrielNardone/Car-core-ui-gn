@@ -1,22 +1,13 @@
 import { AxiosError } from 'axios';
 
 import Api from '../../index';
+import { ICarPicture } from '../picture/picture';
 
-import { CAR_ERRORS_MESSAGES } from '@/errors/car-errors-enum';
+import { CAR_ERRORS_MESSAGES } from '@/errors/car-errors-messages.enum';
 
 const RESOURCE = 'car';
-export interface ICarImages {
-	id: number;
-	createdAt: Date;
-	updatedAt: Date;
-	src: string;
-	description: string;
-	title: string;
-	type: string;
-	date: Date;
-}
 
-export interface ICars {
+export interface ICar {
 	id: number;
 	createdAt: Date;
 	updatedAt: Date;
@@ -26,10 +17,10 @@ export interface ICars {
 	passengers: number;
 	ac: boolean;
 	pricePerDay: number;
-	images: ICarImages[];
+	images: ICarPicture[];
 }
 
-interface newCarDto {
+export interface INewCarDto {
 	brand: string;
 	model: string;
 	color: string;
@@ -38,7 +29,7 @@ interface newCarDto {
 	pricePerDay: number;
 }
 
-interface editCarDto {
+interface IEditCarDto {
 	brand?: string;
 	model?: string;
 	color?: string;
@@ -47,7 +38,7 @@ interface editCarDto {
 	pricePerDay?: number;
 }
 
-export const getAllCars = async (): Promise<ICars[]> => {
+export const getAllCars = async (): Promise<ICar[]> => {
 	try {
 		const { data } = await Api.get(`/${RESOURCE}`);
 
@@ -61,7 +52,7 @@ export const getAllCars = async (): Promise<ICars[]> => {
 	}
 };
 
-export const getCarById = async (id: number): Promise<ICars> => {
+export const getCarById = async (id: number): Promise<ICar> => {
 	try {
 		const { data } = await Api.get(`/${RESOURCE}/${id}`);
 
@@ -75,7 +66,7 @@ export const getCarById = async (id: number): Promise<ICars> => {
 	}
 };
 
-export const createCar = async (newCar: newCarDto): Promise<number> => {
+export const createCar = async (newCar: INewCarDto): Promise<number> => {
 	try {
 		const {
 			data: { id },
@@ -91,7 +82,10 @@ export const createCar = async (newCar: newCarDto): Promise<number> => {
 	}
 };
 
-export const editCar = async (id: number, car: editCarDto): Promise<number> => {
+export const editCar = async (
+	id: number,
+	car: IEditCarDto,
+): Promise<number> => {
 	try {
 		const { status } = await Api.patch(`/${RESOURCE}/${id}`, car);
 

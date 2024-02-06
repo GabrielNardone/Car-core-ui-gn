@@ -2,10 +2,27 @@ import { ArrowUturnLeftIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
-import { onCreateCar } from '@/helpers/car/car-helpers';
-import { createCarSchema } from '@/utils/car/validations/car-validations';
+import { CAR_ERRORS_MESSAGES } from '@/errors/car-errors-messages.enum';
+import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
+import { createCarSchema } from '@/helpers/validations/car.validations';
+import { createCar } from '@/services/api/car/car';
+import { createCarPicture } from '@/services/api/picture/picture';
 
-const NEW_CAR_INITIAL_STATE = {
+interface ICarFormData {
+	brand: string;
+	model: string;
+	color: string;
+	passengers: string;
+	ac: string;
+	pricePerDay: number;
+	picture: any;
+	pictureTitle: string;
+	pictureDescription: string;
+	pictureType: string;
+	pictureDate: string;
+}
+
+const NEW_CAR_INITIAL_STATE: ICarFormData = {
 	brand: '',
 	model: '',
 	color: '',
@@ -13,20 +30,50 @@ const NEW_CAR_INITIAL_STATE = {
 	ac: '',
 	pricePerDay: 0,
 	picture: '',
-	title: '',
-	description: '',
-	type: '',
-	date: '',
+	pictureTitle: '',
+	pictureDescription: '',
+	pictureType: '',
+	pictureDate: '',
 };
 
 export const CarForm = () => {
 	const navigate = useNavigate();
 
+	const handleSubmit = async (values: ICarFormData): Promise<void> => {
+		try {
+			const carId = await createCar({
+				brand: values.brand,
+				model: values.model,
+				color: values.color,
+				pricePerDay: Number(values.pricePerDay),
+				passengers: Number(values.passengers),
+				ac: values.ac === 'true' ? true : false,
+			});
+
+			await createCarPicture({
+				carId,
+				picture: values.picture[0],
+				title: values.pictureTitle,
+				description: values.pictureDescription,
+				type: values.pictureType,
+				date: values.pictureDate,
+			});
+
+			notifyStatus(NOTIFICATION_TYPE.SUCCESS, `Car with id ${carId} created`);
+		} catch (error) {
+			console.log(error);
+			notifyStatus(
+				NOTIFICATION_TYPE.ERROR,
+				CAR_ERRORS_MESSAGES.CREATE_CAR_ERROR,
+			);
+		}
+	};
+
 	const formik = useFormik({
 		initialValues: NEW_CAR_INITIAL_STATE,
 		validationSchema: createCarSchema,
 		onSubmit: async (values) => {
-			onCreateCar(values);
+			await handleSubmit(values);
 			formik.resetForm();
 		},
 	});
@@ -259,7 +306,7 @@ export const CarForm = () => {
 							</div>
 							{formik.touched.picture && formik.errors.picture && (
 								<p data-cy="picture-error" className="text-red-500">
-									{formik.errors.picture}
+									{formik.errors.picture as string}
 								</p>
 							)}
 						</div>
@@ -268,22 +315,22 @@ export const CarForm = () => {
 					<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 						<div className="sm:col-span-3">
 							<label
-								htmlFor="title"
+								htmlFor="pictureTitle"
 								className="block text-sm font-medium leading-6 text-white"
 							>
 								Title
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="title"
-									id="title"
+									data-cy="pictureTitle"
+									id="pictureTitle"
 									type="text"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-									{...formik.getFieldProps('title')}
+									{...formik.getFieldProps('pictureTitle')}
 								/>
-								{formik.touched.title && formik.errors.title && (
+								{formik.touched.pictureTitle && formik.errors.pictureTitle && (
 									<p data-cy="title-error" className="text-red-500">
-										{formik.errors.title}
+										{formik.errors.pictureTitle}
 									</p>
 								)}
 							</div>
@@ -291,40 +338,41 @@ export const CarForm = () => {
 
 						<div className="sm:col-span-3">
 							<label
-								htmlFor="description"
+								htmlFor="pictureDescription"
 								className="block text-sm font-medium leading-6 text-white"
 							>
 								Description
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="description"
-									id="description"
+									data-cy="pictureDescription"
+									id="pictureDescription"
 									type="text"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-									{...formik.getFieldProps('description')}
+									{...formik.getFieldProps('pictureDescription')}
 								/>
-								{formik.touched.description && formik.errors.description && (
-									<p data-cy="description-error" className="text-red-500">
-										{formik.errors.description}
-									</p>
-								)}
+								{formik.touched.pictureDescription &&
+									formik.errors.pictureDescription && (
+										<p data-cy="description-error" className="text-red-500">
+											{formik.errors.pictureDescription}
+										</p>
+									)}
 							</div>
 						</div>
 
 						<div className="sm:col-span-3">
 							<label
-								htmlFor="type"
+								htmlFor="pictureType"
 								className="block text-sm font-medium leading-6 text-white"
 							>
 								Type
 							</label>
 							<div className="mt-2">
 								<select
-									data-cy="type"
-									id="type"
+									data-cy="pictureType"
+									id="pictureType"
 									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
-									{...formik.getFieldProps('type')}
+									{...formik.getFieldProps('pictureType')}
 								>
 									<option value="" disabled>
 										Select type
@@ -334,9 +382,9 @@ export const CarForm = () => {
 									<option value={'side'}>Side</option>
 									<option value={'other'}>Other</option>
 								</select>
-								{formik.touched.type && formik.errors.type && (
+								{formik.touched.pictureType && formik.errors.pictureType && (
 									<p data-cy="type-error" className="text-red-500">
-										{formik.errors.type}
+										{formik.errors.pictureType}
 									</p>
 								)}
 							</div>
@@ -344,22 +392,22 @@ export const CarForm = () => {
 
 						<div className="sm:col-span-3">
 							<label
-								htmlFor="date"
+								htmlFor="pictureDate"
 								className="block text-sm font-medium leading-6 text-white"
 							>
 								Date
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="date"
-									id="date"
+									data-cy="pictureDate"
+									id="pictureDate"
 									type="date"
 									className="block w-full rounded-md border-0 bg-white/5 px-4 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-									{...formik.getFieldProps('date')}
+									{...formik.getFieldProps('pictureDate')}
 								/>
-								{formik.touched.date && formik.errors.date && (
+								{formik.touched.pictureDate && formik.errors.pictureDate && (
 									<p data-cy="date-error" className="text-red-500">
-										{formik.errors.date}
+										{formik.errors.pictureDate}
 									</p>
 								)}
 							</div>
@@ -369,12 +417,6 @@ export const CarForm = () => {
 			</div>
 
 			<div className="mt-6 flex items-center justify-end gap-x-6">
-				<button
-					type="button"
-					className="text-sm font-semibold leading-6 text-white"
-				>
-					Cancel
-				</button>
 				<button
 					type="submit"
 					data-cy="submit-button"

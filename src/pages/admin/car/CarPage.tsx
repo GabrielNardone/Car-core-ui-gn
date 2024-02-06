@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 import { CarTable } from '@/components/admin/car/CarTable';
-import { ICars, deleteCar, getAllCars } from '@/service/api/car/car-requests';
+import { ICar, deleteCar, getAllCars } from '@/services/api/car/car';
 
 export const CarPage = () => {
-	const [cars, setCars] = useState<ICars[]>([]);
+	const [cars, setCars] = useState<ICar[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const [showGallery, setShowGallery] = useState(false);
