@@ -1,19 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
 import { CarTable } from '@/components/admin/car/CarTable';
+import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
 import { ICar, deleteCar, getAllCars } from '@/services/api/car/car';
 
 export const CarPage = () => {
 	const [cars, setCars] = useState<ICar[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
-
-	const [showGallery, setShowGallery] = useState(false);
-
-	const onCloseModal = () => {
-		setShowGallery(false);
-	};
 
 	const handleDeleteCar = async (carId: number): Promise<void> => {
 		await deleteCar(carId);
@@ -27,12 +21,10 @@ export const CarPage = () => {
 			setIsLoading(false);
 		} catch (error) {
 			console.log(error);
-			Swal.fire({
-				icon: 'error',
-				title: `<span data-cy="get-all-cars-error-alert">${error}</span>`,
-				background: '#000000',
-				color: '#F0F0F0',
-			});
+			notifyStatus(
+				NOTIFICATION_TYPE.ERROR,
+				`<span data-cy="get-all-cars-error-alert">${error}</span>`,
+			);
 		}
 	};
 
@@ -74,13 +66,7 @@ export const CarPage = () => {
 						<div className="mt-8 flow-root">
 							<div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 								<div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-									<CarTable
-										cars={cars}
-										handleDeleteCar={handleDeleteCar}
-										showGallery={showGallery}
-										onCloseModal={onCloseModal}
-										setShowGallery={setShowGallery}
-									/>
+									<CarTable cars={cars} handleDeleteCar={handleDeleteCar} />
 								</div>
 							</div>
 						</div>

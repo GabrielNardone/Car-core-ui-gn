@@ -2,7 +2,6 @@ import { ArrowUturnLeftIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
-import { CAR_ERRORS_MESSAGES } from '@/errors/car-errors-messages.enum';
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
 import { createCarSchema } from '@/helpers/validations/car.validations';
 import { createCar } from '@/services/api/car/car';
@@ -59,12 +58,15 @@ export const CarForm = () => {
 				date: values.pictureDate,
 			});
 
-			notifyStatus(NOTIFICATION_TYPE.SUCCESS, `Car with id ${carId} created`);
+			notifyStatus(
+				NOTIFICATION_TYPE.SUCCESS,
+				`<span data-cy="create-car-success">Car with id ${carId} created!</span>`,
+			);
 		} catch (error) {
 			console.log(error);
 			notifyStatus(
 				NOTIFICATION_TYPE.ERROR,
-				CAR_ERRORS_MESSAGES.CREATE_CAR_ERROR,
+				`<span data-cy="create-car-error">${error}</span>`,
 			);
 		}
 	};

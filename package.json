@@ -38,7 +38,6 @@
 		"match-sorter": "^6.3.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"react-modal": "^3.16.1",
 		"react-router-dom": "^6.11.1",
 		"sort-by": "^1.2.0",
 		"sweetalert2": "^11.10.4",

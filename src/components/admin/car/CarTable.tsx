@@ -2,27 +2,15 @@ import { PhotoIcon } from '@heroicons/react/24/outline';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 
-import { Carousel } from './Carousel';
-import { GalleryModal } from './GalleryModal';
-
 import { notifyConfirmation } from '@/helpers/notifications';
 import { ICar } from '@/services/api/car/car';
 
 interface ICarTable {
 	cars: ICar[];
 	handleDeleteCar: (carId: number) => Promise<void>;
-	showGallery: boolean;
-	onCloseModal: () => void;
-	setShowGallery: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const CarTable = ({
-	cars,
-	handleDeleteCar,
-	showGallery,
-	onCloseModal,
-	setShowGallery,
-}: ICarTable) => {
+export const CarTable = ({ cars, handleDeleteCar }: ICarTable) => {
 	return (
 		<table className="min-w-full divide-y divide-gray-700">
 			<thead>
@@ -93,17 +81,20 @@ export const CarTable = ({
 							{car.pricePerDay}
 						</td>
 						<td className="flex whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-							<button
+							<Link
 								data-cy="gallery-button"
-								onClick={() => setShowGallery(true)}
+								to={`/admin/car-gallery/${car.id}`}
+								state={{
+									pictures: car.images,
+									id: car.id,
+									brand: car.brand,
+									model: car.model,
+								}}
 								className="text-indigo-400 hover:text-indigo-300"
 							>
 								See gallery
-							</button>
+							</Link>
 							<PhotoIcon className="w-6 ml-2" />
-							<GalleryModal isOpen={showGallery} onCloseModal={onCloseModal}>
-								<Carousel images={car.images} />
-							</GalleryModal>
 						</td>
 						<td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
 							<Link
@@ -129,8 +120,8 @@ export const CarTable = ({
 								className="text-white w-6 hover:text-red-400 hover:cursor-pointer"
 								onClick={() => {
 									notifyConfirmation(
-										'<span data-cy="confirm-delete">Yes, delete it!</span>',
-										'<span data-cy="close-delete-alert">Ok</span>',
+										'<span data-cy="confirm-car-delete-alert">Yes, delete it!</span>',
+										'<span data-cy="close-car-delete-alert">Ok</span>',
 										handleDeleteCar,
 										car.id,
 									);

@@ -2,7 +2,6 @@ import { ArrowUturnLeftIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
 import {
 	NOTIFICATION_TYPE,
@@ -62,7 +61,7 @@ export const CarEdit = () => {
 
 	const onHandleDelete = (id: number): void => {
 		notifyConfirmation(
-			'<span data-cy="confirm-picture-delete">Yes, delete it!</span>',
+			'<span data-cy="confirm-picture-delete-alert">Yes, delete it!</span>',
 			'<span data-cy="close-picture-delete-alert">Ok</span>',
 			deletePicture,
 			id,
@@ -145,12 +144,10 @@ export const CarEdit = () => {
 			setIsLoading(false);
 		} catch (error) {
 			console.log(error);
-			Swal.fire({
-				icon: 'error',
-				title: `<span data-cy="get-car-images-error-alert">${error}</span>`,
-				background: '#000000',
-				color: '#F0F0F0',
-			});
+			notifyStatus(
+				NOTIFICATION_TYPE.ERROR,
+				`<span data-cy="get-car-images-error-alert">${error}</span>`,
+			);
 		}
 	};
 
