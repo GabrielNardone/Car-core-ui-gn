@@ -1,0 +1,86 @@
+[
+	{
+		"id": 2,
+		"createdAt": "2024-01-22T13:35:39.183Z",
+		"updatedAt": "2024-01-22T13:35:39.183Z",
+		"brand": "BMW",
+		"model": "Classic",
+		"color": "black",
+		"passengers": 4,
+		"ac": true,
+		"pricePerDay": 750000,
+		"images": [
+			{
+				"id": 1,
+				"src": "cypress/fixtures/car-2.jpg",
+				"title": "Car image",
+				"description": "Simple image",
+				"type": "front",
+				"date": "2024-01-22"
+			}
+		]
+	},
+	{
+		"id": 5,
+		"createdAt": "2024-01-22T13:37:18.343Z",
+		"updatedAt": "2024-01-22T13:37:18.343Z",
+		"brand": "Toyota",
+		"model": "heroic",
+		"color": "black",
+		"passengers": 4,
+		"ac": true,
+		"pricePerDay": 750000,
+		"images": [
+			{
+				"id": 1,
+				"src": "cypress/fixtures/car-2.jpg",
+				"title": "Car image",
+				"description": "Simple image",
+				"type": "front",
+				"date": "2024-01-22"
+			}
+		]
+	},
+	{
+		"id": 8,
+		"createdAt": "2024-01-22T13:38:12.872Z",
+		"updatedAt": "2024-01-22T13:38:12.872Z",
+		"brand": "Nissan",
+		"model": "Omega",
+		"color": "black",
+		"passengers": 4,
+		"ac": true,
+		"pricePerDay": 750000,
+		"images": [
+			{
+				"id": 1,
+				"src": "cypress/fixtures/car-2.jpg",
+				"title": "Car image",
+				"description": "Simple image",
+				"type": "front",
+				"date": "2024-01-22"
+			}
+		]
+	},
+	{
+		"id": 6,
+		"createdAt": "2024-01-22T13:37:44.213Z",
+		"updatedAt": "2024-01-22T13:37:44.213Z",
+		"brand": "Volkswagen",
+		"model": "Volk",
+		"color": "black",
+		"passengers": 4,
+		"ac": true,
+		"pricePerDay": 750000,
+		"images": [
+			{
+				"id": 1,
+				"src": "cypress/fixtures/car-2.jpg",
+				"title": "Car image",
+				"description": "Simple image",
+				"type": "front",
+				"date": "2024-01-22"
+			}
+		]
+	}
+]

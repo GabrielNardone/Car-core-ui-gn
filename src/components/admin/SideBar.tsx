@@ -1,25 +1,11 @@
-import {
-	DocumentDuplicateIcon,
-	KeyIcon,
-	UsersIcon,
-} from '@heroicons/react/24/outline';
+import { KeyIcon } from '@heroicons/react/24/outline';
 import { NavLink } from 'react-router-dom';
 
 const navigation = [
 	{
-		name: 'Users',
-		href: '/admin/user',
-		icon: UsersIcon,
-	},
-	{
-		name: 'Cars',
+		name: 'Car',
 		href: '/admin/car',
 		icon: KeyIcon,
-	},
-	{
-		name: 'Rents',
-		href: '/admin/rent',
-		icon: DocumentDuplicateIcon,
 	},
 ];
 
