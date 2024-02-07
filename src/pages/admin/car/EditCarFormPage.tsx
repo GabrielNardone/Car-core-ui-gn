@@ -92,7 +92,7 @@ export const EditCarFormPage = () => {
 				color: values.color || carInfo.color,
 				pricePerDay: values.pricePerDay || carInfo.pricePerDay,
 				passengers: Number(values.passengers) || carInfo.passengers,
-				ac: values.ac === 'true' ? true : false || carInfo.ac,
+				ac: values.ac === 'true' || carInfo.ac,
 			});
 
 			notifyStatus(

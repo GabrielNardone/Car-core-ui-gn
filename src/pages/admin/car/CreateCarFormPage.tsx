@@ -46,12 +46,12 @@ export const CreateCarFormPage = () => {
 				color: values.color,
 				pricePerDay: values.pricePerDay,
 				passengers: Number(values.passengers),
-				ac: values.ac === 'true' ? true : false,
+				ac: values.ac === 'true',
 			});
 
 			await createCarPicture({
 				carId,
-				picture: values.picture[0],
+				picture: values.picture,
 				title: values.pictureTitle,
 				description: values.pictureDescription,
 				type: values.pictureType,
