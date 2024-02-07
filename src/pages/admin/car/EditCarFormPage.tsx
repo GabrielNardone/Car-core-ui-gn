@@ -1,7 +1,7 @@
 import { ArrowUturnLeftIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
 	NOTIFICATION_TYPE,
@@ -12,9 +12,8 @@ import {
 	createPictureSchema,
 	editCarSchema,
 } from '@/helpers/validations/car.validations';
-import { editCar, getCarById } from '@/services/api/car/car';
+import { ICar, editCar, getCarById } from '@/services/api/car/car';
 import {
-	ICarPicture,
 	createCarPicture,
 	deletePicture,
 } from '@/services/api/picture/picture';
@@ -23,8 +22,8 @@ interface INewCarState {
 	brand: string;
 	model: string;
 	color: string;
-	passengers: string;
-	ac: string;
+	passengers: number;
+	ac: boolean;
 	pricePerDay: number;
 }
 
@@ -45,20 +44,20 @@ const NEW_CAR_IMAGES_INITIAL_STATE: INewImageState = {
 };
 
 export const EditCarFormPage = () => {
-	const [carPictures, setCarPictures] = useState<ICarPicture[]>([]);
+	const [car, setCar] = useState<ICar>({} as ICar);
 	const [isLoading, setIsLoading] = useState(true);
+	const { id } = useParams();
+	const carId = Number(id);
 
 	const navigate = useNavigate();
 
-	const { state: carInfo } = useLocation();
-
 	const NEW_CAR_INITIAL_STATE: INewCarState = {
-		brand: carInfo.brand,
-		model: carInfo.model,
-		color: carInfo.color,
-		passengers: carInfo.passengers,
-		ac: carInfo.ac,
-		pricePerDay: carInfo.pricePerDay,
+		brand: car?.brand || '',
+		model: car?.model || '',
+		color: car?.color || '',
+		passengers: car?.passengers || 0,
+		ac: car?.ac || false,
+		pricePerDay: car?.pricePerDay || 0,
 	};
 	const handleDeletePicture = async (pictureId: number): Promise<void> => {
 		try {
@@ -67,9 +66,10 @@ export const EditCarFormPage = () => {
 				NOTIFICATION_TYPE.DELETED,
 				'close-car-edit-delete-picutre-alert',
 			);
-			setCarPictures((prevPictures) =>
-				prevPictures?.filter((picture) => picture.id !== pictureId),
-			);
+			setCar({
+				...car,
+				images: car.images?.filter((image) => image.id !== pictureId),
+			});
 		} catch (error) {
 			if (error instanceof Error) {
 				notifyStatus(
@@ -86,19 +86,20 @@ export const EditCarFormPage = () => {
 
 	const handleSubmitNewCar = async (values: INewCarState): Promise<void> => {
 		try {
-			await editCar(carInfo.id, {
-				brand: values.brand || carInfo.brand,
-				model: values.model || carInfo.model,
-				color: values.color || carInfo.color,
-				pricePerDay: values.pricePerDay || carInfo.pricePerDay,
-				passengers: Number(values.passengers) || carInfo.passengers,
-				ac: values.ac === 'true' || carInfo.ac,
+			await editCar(carId, {
+				brand: values.brand || car.brand,
+				model: values.model || car.model,
+				color: values.color || car.color,
+				pricePerDay: values.pricePerDay || car.pricePerDay,
+				passengers: Number(values.passengers) || car.passengers,
+				ac: values.ac || car.ac,
 			});
+			setCar({ ...car, ...values });
 
 			notifyStatus(
 				NOTIFICATION_TYPE.SUCCESS,
 				'car-edit-success',
-				`Car with ID:${carInfo.id} updated!`,
+				`Car with ID: ${carId} updated!`,
 			);
 		} catch (error) {
 			if (error instanceof Error) {
@@ -112,7 +113,7 @@ export const EditCarFormPage = () => {
 	): Promise<void> => {
 		try {
 			const picture = await createCarPicture({
-				carId: carInfo.id,
+				carId: carId,
 				picture: values.picture,
 				title: values.pictureTitle,
 				description: values.pictureDescription,
@@ -120,12 +121,15 @@ export const EditCarFormPage = () => {
 				date: values.pictureDate,
 			});
 
-			setCarPictures((prevPictures) => [...prevPictures, picture]);
+			setCar({
+				...car,
+				images: [...(car.images || []), picture],
+			});
 
 			notifyStatus(
 				NOTIFICATION_TYPE.SUCCESS,
 				'car-edit-create-picture-success',
-				`New picture saved on ${carInfo.brand} ${carInfo.model} (ID:${carInfo.id})`,
+				`New picture saved on ${car.brand} ${car.model} (ID:${carId})`,
 			);
 		} catch (error) {
 			if (error instanceof Error) {
@@ -139,6 +143,7 @@ export const EditCarFormPage = () => {
 	};
 
 	const formikCar = useFormik({
+		enableReinitialize: true,
 		initialValues: NEW_CAR_INITIAL_STATE,
 		validationSchema: editCarSchema,
 		onSubmit: async (values) => {
@@ -160,8 +165,8 @@ export const EditCarFormPage = () => {
 	useEffect(() => {
 		const fetchCarById = async (): Promise<void> => {
 			try {
-				const car = await getCarById(carInfo.id);
-				setCarPictures(car.images || []);
+				const car = await getCarById(carId);
+				setCar(car);
 				setIsLoading(false);
 			} catch (error) {
 				if (error instanceof Error) {
@@ -174,7 +179,7 @@ export const EditCarFormPage = () => {
 			}
 		};
 		fetchCarById();
-	}, [carInfo.id]);
+	}, [carId]);
 
 	return (
 		<div className="flex flex-col flex-1">
@@ -204,7 +209,7 @@ export const EditCarFormPage = () => {
 
 					<div>
 						<h2 className="text-base font-semibold leading-7 text-white">
-							{carInfo.brand} {carInfo.model} Information (ID {carInfo.id})
+							{car.brand} {car.model} Information (ID {carId})
 						</h2>
 
 						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 border-b border-white/10 pb-8">
@@ -411,7 +416,7 @@ export const EditCarFormPage = () => {
 								{isLoading ? (
 									<span className="text-white">Loading...</span>
 								) : (
-									carPictures.map((picture) => (
+									car.images.map((picture) => (
 										<div className="grid" key={picture.id}>
 											<img
 												src={picture.src ? picture.src : '/no-image.jpg'}

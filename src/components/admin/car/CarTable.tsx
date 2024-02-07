@@ -100,15 +100,6 @@ export const CarTable = ({ cars, handleDeleteCar }: ICarTable) => {
 							<Link
 								data-cy={`edit-car-${car.id}`}
 								to={`/admin/car-edit/${car.id}`}
-								state={{
-									id: car.id,
-									brand: car.brand,
-									model: car.model,
-									color: car.color,
-									pricePerDay: car.pricePerDay,
-									ac: car.ac,
-									passengers: car.passengers,
-								}}
 								className="text-indigo-400 hover:text-indigo-300"
 							>
 								Edit

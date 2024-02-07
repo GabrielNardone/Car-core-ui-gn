@@ -228,7 +228,7 @@ describe('Car edit form', () => {
 		cy.get('[data-cy=car-edit-success]').should('be.visible');
 		cy.get('[data-cy=car-edit-success]').should(
 			'contain',
-			'Car with ID:2 updated!',
+			'Car with ID: 2 updated!',
 		);
 	});
 
