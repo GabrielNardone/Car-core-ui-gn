@@ -422,6 +422,8 @@ export const CreateCarFormPage = () => {
 									data-cy="car-create-picture-date"
 									id="pictureDate"
 									type="date"
+									max={new Date().toISOString().split('T')[0]}
+									min="1900-01-01"
 									className="block w-full rounded-md border-0 bg-white/5 px-4 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('pictureDate')}
 								/>
