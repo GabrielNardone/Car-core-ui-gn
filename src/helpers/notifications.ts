@@ -34,7 +34,7 @@ export const notifyStatus = (
 		case NOTIFICATION_TYPE.WARNING:
 			return Swal.fire({
 				icon: 'warning',
-				title: `<span data-cy=${dataCy}>Ok</span>`,
+				title: `<span data-cy=${dataCy}>${message}</span>`,
 				showConfirmButton: false,
 				timer: 2500,
 				background: '#000000',
@@ -48,7 +48,7 @@ export const notifyStatus = (
 				background: '#000000',
 				color: '#F0F0F0',
 				confirmButtonColor: '#17B169',
-				confirmButtonText: `<span data-cy=${dataCy}>${message}</span>`,
+				confirmButtonText: `<span data-cy=${dataCy}>Ok</span>`,
 			});
 	}
 };

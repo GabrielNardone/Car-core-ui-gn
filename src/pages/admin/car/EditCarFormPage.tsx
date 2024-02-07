@@ -157,26 +157,24 @@ export const EditCarFormPage = () => {
 		},
 	});
 
-	const fetchCarById = async (): Promise<void> => {
-		console.log('repeat');
-		try {
-			const car = await getCarById(carInfo.id);
-			setCarPictures(car.images || []);
-			setIsLoading(false);
-		} catch (error) {
-			if (error instanceof Error) {
-				notifyStatus(
-					NOTIFICATION_TYPE.ERROR,
-					'get-car-pictures-error-alert',
-					error.message,
-				);
-			}
-		}
-	};
-
 	useEffect(() => {
+		const fetchCarById = async (): Promise<void> => {
+			try {
+				const car = await getCarById(carInfo.id);
+				setCarPictures(car.images || []);
+				setIsLoading(false);
+			} catch (error) {
+				if (error instanceof Error) {
+					notifyStatus(
+						NOTIFICATION_TYPE.ERROR,
+						'get-car-pictures-error-alert',
+						error.message,
+					);
+				}
+			}
+		};
 		fetchCarById();
-	}, []);
+	}, [carInfo.id]);
 
 	return (
 		<div className="flex flex-col flex-1">
