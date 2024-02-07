@@ -3,10 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ICarPicture } from '@/services/api/picture/picture';
 
-export const CarGallery = () => {
+export const CarGalleryPage = () => {
 	const { state: carData } = useLocation();
 	const navigate = useNavigate();
-	console.log(carData);
 
 	return (
 		<div className="flex-1 p-6">
@@ -37,7 +36,7 @@ export const CarGallery = () => {
 					</div>
 				) : (
 					carData.pictures.map((carPicture: ICarPicture) => (
-						<div key={carPicture.id} className="w-[50%]">
+						<div key={carPicture.id} className="w-[60%]">
 							<img
 								data-cy={`car-picture-${carPicture.id}`}
 								src={carPicture.src ? carPicture.src : 'no-image.jpg'}

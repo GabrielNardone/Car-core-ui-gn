@@ -5,24 +5,25 @@ import { CarTable } from '@/components/admin/car/CarTable';
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
 import { ICar, deleteCar, getAllCars } from '@/services/api/car/car';
 
-export const CarPage = () => {
+export const CarTablePage = () => {
 	const [cars, setCars] = useState<ICar[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const handleDeleteCar = async (carId: number): Promise<void> => {
 		try {
 			await deleteCar(carId);
-			notifyStatus(
-				NOTIFICATION_TYPE.DELETED,
-				'<span data-cy="close-car-table-delete-alert">Ok</span>',
-			);
+
+			notifyStatus(NOTIFICATION_TYPE.DELETED, 'close-car-table-delete-alert');
+
 			setCars((prevCars) => prevCars?.filter((car) => car.id !== carId));
 		} catch (error) {
-			console.log(error);
-			notifyStatus(
-				NOTIFICATION_TYPE.ERROR,
-				`<span data-cy="car-table-delete-error">${error}</span>`,
-			);
+			if (error instanceof Error) {
+				notifyStatus(
+					NOTIFICATION_TYPE.ERROR,
+					'car-table-delete-error',
+					error.message,
+				);
+			}
 		}
 	};
 
@@ -31,12 +32,14 @@ export const CarPage = () => {
 			const cars = await getAllCars();
 			setCars(cars);
 			setIsLoading(false);
-		} catch (error) {
-			console.log(error);
-			notifyStatus(
-				NOTIFICATION_TYPE.ERROR,
-				`<span data-cy="get-all-cars-error-alert">${error}</span>`,
-			);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				notifyStatus(
+					NOTIFICATION_TYPE.ERROR,
+					'get-all-cars-error-alert',
+					error.message,
+				);
+			}
 		}
 	};
 

@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { CarEdit } from '@/pages/admin/car/CarEdit';
-import { CarForm } from '@/pages/admin/car/CarForm';
-import { CarGallery } from '@/pages/admin/car/CarGallery';
-import { CarPage } from '@/pages/admin/car/CarPage';
+import { CarGalleryPage } from '@/pages/admin/car/CarGalleryPage';
+import { CarTablePage } from '@/pages/admin/car/CarTablePage';
+import { CreateCarFormPage } from '@/pages/admin/car/CreateCarFormPage';
+import { EditCarFormPage } from '@/pages/admin/car/EditCarFormPage';
 import { AdminPage } from '@/pages/admin/layout/AdminPage';
 
 import Root from '@pages/Root';
@@ -29,19 +29,19 @@ const router = createBrowserRouter([
 				children: [
 					{
 						path: '/admin/car',
-						element: <CarPage />,
+						element: <CarTablePage />,
 					},
 					{
 						path: '/admin/car-form',
-						element: <CarForm />,
+						element: <CreateCarFormPage />,
 					},
 					{
 						path: '/admin/car-edit/:id',
-						element: <CarEdit />,
+						element: <EditCarFormPage />,
 					},
 					{
 						path: '/admin/car-gallery/:id',
-						element: <CarGallery />,
+						element: <CarGalleryPage />,
 					},
 				],
 			},

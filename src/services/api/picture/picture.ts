@@ -17,7 +17,7 @@ export interface ICarPicture {
 
 interface ICreateCarPictureDto {
 	carId: number;
-	picture: any;
+	picture: FileList;
 	title: string;
 	description: string;
 	type: string;
@@ -28,7 +28,7 @@ export const createCarPicture = async (
 ): Promise<ICarPicture> => {
 	try {
 		const formData = new FormData();
-		formData.append('file', createCarPictureDto.picture);
+		formData.append('file', createCarPictureDto.picture[0]);
 		formData.append('title', createCarPictureDto.title);
 		formData.append('description', createCarPictureDto.description);
 		formData.append('type', createCarPictureDto.type);

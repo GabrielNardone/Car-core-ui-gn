@@ -26,11 +26,10 @@ export const createCarSchema = yup.object({
 			'fileFormat',
 			'Only JPG, JPEG and PNG files are allowed',
 			(value: FormikValues) => {
-				if (value) {
+				if (value.length) {
 					const supportedFormats = ['jpg', 'jpeg', 'png'];
 					return supportedFormats.includes(value[0].name.split('.').pop());
 				}
-				return true;
 			},
 		),
 	pictureTitle: yup
@@ -63,7 +62,19 @@ export const editCarSchema = yup.object({
 });
 
 export const createPictureSchema = yup.object({
-	picture: yup.mixed().required('Required'),
+	picture: yup
+		.mixed()
+		.required('Required')
+		.test(
+			'fileFormat',
+			'Only JPG, JPEG and PNG files are allowed',
+			(value: FormikValues) => {
+				if (value.length) {
+					const supportedFormats = ['jpg', 'jpeg', 'png'];
+					return supportedFormats.includes(value[0].name.split('.').pop());
+				}
+			},
+		),
 	pictureTitle: yup
 		.string()
 		.required('Required')

@@ -14,7 +14,7 @@ interface ICarFormData {
 	passengers: string;
 	ac: string;
 	pricePerDay: number;
-	picture: any;
+	picture: FileList;
 	pictureTitle: string;
 	pictureDescription: string;
 	pictureType: string;
@@ -28,14 +28,14 @@ const NEW_CAR_INITIAL_STATE: ICarFormData = {
 	passengers: '',
 	ac: '',
 	pricePerDay: 0,
-	picture: '',
+	picture: [] as unknown as FileList,
 	pictureTitle: '',
 	pictureDescription: '',
 	pictureType: '',
 	pictureDate: '',
 };
 
-export const CarForm = () => {
+export const CreateCarFormPage = () => {
 	const navigate = useNavigate();
 
 	const handleSubmit = async (values: ICarFormData): Promise<void> => {
@@ -44,7 +44,7 @@ export const CarForm = () => {
 				brand: values.brand,
 				model: values.model,
 				color: values.color,
-				pricePerDay: Number(values.pricePerDay),
+				pricePerDay: values.pricePerDay,
 				passengers: Number(values.passengers),
 				ac: values.ac === 'true' ? true : false,
 			});
@@ -60,14 +60,17 @@ export const CarForm = () => {
 
 			notifyStatus(
 				NOTIFICATION_TYPE.SUCCESS,
-				`<span data-cy="create-car-success">Car with id ${carId} created!</span>`,
+				'create-car-success',
+				`Car with id ${carId} created!`,
 			);
 		} catch (error) {
-			console.log(error);
-			notifyStatus(
-				NOTIFICATION_TYPE.ERROR,
-				`<span data-cy="create-car-error">${error}</span>`,
-			);
+			if (error instanceof Error) {
+				notifyStatus(
+					NOTIFICATION_TYPE.ERROR,
+					'create-car-error',
+					error.message,
+				);
+			}
 		}
 	};
 
@@ -123,7 +126,7 @@ export const CarForm = () => {
 									data-cy="car-create-brand"
 									id="brand"
 									type="text"
-									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+									className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('brand')}
 								/>
 								{formik.touched.brand && formik.errors.brand && (
@@ -146,7 +149,7 @@ export const CarForm = () => {
 									data-cy="car-create-model"
 									id="model"
 									type="text"
-									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+									className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('model')}
 								/>
 								{formik.touched.model && formik.errors.model && (
@@ -260,15 +263,15 @@ export const CarForm = () => {
 							</label>
 							<div className="mt-2">
 								<input
-									data-cy="car-create-pricePerDay"
+									data-cy="car-create-price-per-day"
 									type="number"
 									id="pricePerDay"
-									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+									className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('pricePerDay')}
 								/>
 								{formik.touched.pricePerDay && formik.errors.pricePerDay && (
 									<p
-										data-cy="car-create-pricePerDay-error"
+										data-cy="car-create-price-per-day-error"
 										className="text-red-500"
 									>
 										{formik.errors.pricePerDay}
@@ -314,7 +317,7 @@ export const CarForm = () => {
 							</div>
 							{formik.touched.picture && formik.errors.picture && (
 								<p data-cy="car-create-picture-error" className="text-red-500">
-									{formik.errors.picture as string}
+									{formik.errors.picture as unknown as string}
 								</p>
 							)}
 						</div>
@@ -333,7 +336,7 @@ export const CarForm = () => {
 									data-cy="car-create-picture-title"
 									id="pictureTitle"
 									type="text"
-									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+									className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('pictureTitle')}
 								/>
 								{formik.touched.pictureTitle && formik.errors.pictureTitle && (
@@ -359,7 +362,7 @@ export const CarForm = () => {
 									data-cy="car-create-picture-description"
 									id="pictureDescription"
 									type="text"
-									className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+									className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 									{...formik.getFieldProps('pictureDescription')}
 								/>
 								{formik.touched.pictureDescription &&

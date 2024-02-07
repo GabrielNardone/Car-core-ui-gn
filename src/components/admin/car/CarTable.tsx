@@ -120,7 +120,7 @@ export const CarTable = ({ cars, handleDeleteCar }: ICarTable) => {
 								className="text-white w-6 hover:text-red-400 hover:cursor-pointer"
 								onClick={() => {
 									notifyConfirmation(
-										'<span data-cy="confirm-car-delete-alert">Yes, delete it!</span>',
+										'confirm-car-delete-alert',
 										handleDeleteCar,
 										car.id,
 									);

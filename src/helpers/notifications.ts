@@ -8,14 +8,15 @@ export enum NOTIFICATION_TYPE {
 }
 export const notifyStatus = (
 	type: NOTIFICATION_TYPE,
-	message: string,
+	dataCy: string,
+	message?: string,
 ): Promise<SweetAlertResult<unknown>> => {
 	switch (type) {
 		case NOTIFICATION_TYPE.SUCCESS:
 			return Swal.fire({
 				position: 'top-end',
 				icon: 'success',
-				title: message,
+				title: `<span data-cy=${dataCy}>${message}</span>`,
 				showConfirmButton: false,
 				timer: 2500,
 				background: '#000000',
@@ -24,15 +25,17 @@ export const notifyStatus = (
 		case NOTIFICATION_TYPE.ERROR:
 			return Swal.fire({
 				icon: 'error',
-				title: message,
-				timer: 2500,
+				title: `<span data-cy=${dataCy}>${message}</span>`,
+				showConfirmButton: false,
+				timer: 5000,
 				background: '#000000',
 				color: '#F0F0F0',
 			});
 		case NOTIFICATION_TYPE.WARNING:
 			return Swal.fire({
 				icon: 'warning',
-				title: message,
+				title: `<span data-cy=${dataCy}>Ok</span>`,
+				showConfirmButton: false,
 				timer: 2500,
 				background: '#000000',
 				color: '#F0F0F0',
@@ -45,13 +48,13 @@ export const notifyStatus = (
 				background: '#000000',
 				color: '#F0F0F0',
 				confirmButtonColor: '#17B169',
-				confirmButtonText: message,
+				confirmButtonText: `<span data-cy=${dataCy}>${message}</span>`,
 			});
 	}
 };
 
 export const notifyConfirmation = (
-	confirmButtonText: string,
+	dataCy: string,
 	callback: (id: number) => void,
 	id: number,
 ) => {
@@ -63,7 +66,7 @@ export const notifyConfirmation = (
 		showCancelButton: true,
 		confirmButtonColor: '#17B169',
 		cancelButtonColor: '#d33',
-		confirmButtonText: confirmButtonText,
+		confirmButtonText: `<span data-cy=${dataCy}>Yes, delete it!</span>`,
 	}).then((result) => {
 		if (result.isConfirmed) {
 			callback(id);

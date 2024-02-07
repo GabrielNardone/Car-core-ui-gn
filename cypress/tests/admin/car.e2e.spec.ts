@@ -29,12 +29,9 @@ describe('Car table', () => {
 		}).as('getAllCarsError');
 		cy.visit('/admin/car');
 
-		cy.wait('@getAllCarsError');
-		cy.get('[data-cy=get-all-cars-error-alert]').should('be.visible');
-		cy.get('[data-cy=get-all-cars-error-alert]').should(
-			'contain',
-			'Error: Request failed with status code 500',
-		);
+		cy.get('[data-cy=get-all-cars-error-alert]')
+			.should('be.visible')
+			.and('contain', 'Request failed with status code 500');
 	});
 });
 
@@ -55,7 +52,7 @@ describe('Car create form', () => {
 		cy.get('[data-cy=car-create-color]').select('black');
 		cy.get('[data-cy=car-create-passengers]').select('4');
 		cy.get('[data-cy=car-create-ac]').select('true');
-		cy.get('[data-cy=car-create-pricePerDay]').type('750000');
+		cy.get('[data-cy=car-create-price-per-day]').type('750000');
 
 		cy.get('[type="file"]').selectFile(
 			{
@@ -82,7 +79,7 @@ describe('Car create form', () => {
 
 	it('Should display errors if inupts don´t match validations', () => {
 		cy.get('[data-cy=car-create-brand]').type('To');
-		cy.get('[data-cy=car-create-pricePerDay]').type('0');
+		cy.get('[data-cy=car-create-price-per-day]').type('0');
 		cy.get('[data-cy=car-create-picture-title]').type('ca');
 
 		cy.get('[data-cy=car-create-form]').submit();
@@ -92,7 +89,7 @@ describe('Car create form', () => {
 		cy.get('[data-cy=car-create-color-error]').should('be.visible');
 		cy.get('[data-cy=car-create-passengers-error]').should('be.visible');
 		cy.get('[data-cy=car-create-ac-error]').should('be.visible');
-		cy.get('[data-cy=car-create-pricePerDay-error]').should('be.visible');
+		cy.get('[data-cy=car-create-price-per-day-error]').should('be.visible');
 		cy.get('[data-cy=car-create-picture-title-error]').should('be.visible');
 		cy.get('[data-cy=car-create-picture-description-error]').should(
 			'be.visible',
@@ -111,7 +108,7 @@ describe('Car create form', () => {
 		cy.get('[data-cy=car-create-color]').select('black');
 		cy.get('[data-cy=car-create-passengers]').select('4');
 		cy.get('[data-cy=car-create-ac]').select('true');
-		cy.get('[data-cy=car-create-pricePerDay]').type('750000');
+		cy.get('[data-cy=car-create-price-per-day]').type('750000');
 
 		cy.get('[type="file"]').selectFile(
 			{
@@ -135,7 +132,7 @@ describe('Car create form', () => {
 		cy.get('[data-cy=create-car-error]').should('be.visible');
 		cy.get('[data-cy=create-car-error]').should(
 			'contain',
-			'Error: Request failed with status code 500',
+			'Request failed with status code 500',
 		);
 	});
 
@@ -149,7 +146,7 @@ describe('Car create form', () => {
 		cy.get('[data-cy=car-create-color]').select('black');
 		cy.get('[data-cy=car-create-passengers]').select('4');
 		cy.get('[data-cy=car-create-ac]').select('true');
-		cy.get('[data-cy=car-create-pricePerDay]').type('750000');
+		cy.get('[data-cy=car-create-price-per-day]').type('750000');
 
 		cy.get('[type="file"]').selectFile(
 			{
@@ -173,7 +170,7 @@ describe('Car create form', () => {
 		cy.get('[data-cy=create-car-error]').should('be.visible');
 		cy.get('[data-cy=create-car-error]').should(
 			'contain',
-			'Error: Request failed with status code 422',
+			'Request failed with status code 422',
 		);
 	});
 });
@@ -214,7 +211,7 @@ describe('Car edit form', () => {
 		cy.get('[data-cy=get-car-pictures-error-alert]').should('be.visible');
 		cy.get('[data-cy=get-car-pictures-error-alert]').should(
 			'contain',
-			'Error: Request failed with status code 500',
+			'Request failed with status code 500',
 		);
 	});
 
@@ -223,6 +220,7 @@ describe('Car edit form', () => {
 
 		cy.get('[data-cy=car-edit-brand]').type('VolksWagen');
 		cy.get('[data-cy=car-edit-model]').type('Classic');
+		cy.get('[data-cy=car-edit-price-per-day]').type('90000');
 
 		cy.get('[data-cy=car-edit-form]').submit();
 
@@ -230,7 +228,7 @@ describe('Car edit form', () => {
 		cy.get('[data-cy=car-edit-success]').should('be.visible');
 		cy.get('[data-cy=car-edit-success]').should(
 			'contain',
-			'BMW Classic (ID:2) updated!',
+			'Car with ID:2 updated!',
 		);
 	});
 
@@ -288,7 +286,7 @@ describe('Car edit form', () => {
 		cy.get('[data-cy=car-edit-create-picture-error]').should('be.visible');
 		cy.get('[data-cy=car-edit-create-picture-error]').should(
 			'contain',
-			'Error: Request failed with status code 422',
+			'Request failed with status code 422',
 		);
 	});
 
@@ -324,7 +322,7 @@ describe('Car edit form', () => {
 			.click();
 		cy.get('[data-cy=car-edit-delete-picture-error]')
 			.should('be.visible')
-			.and('contain', 'Error: Request failed with status code 500');
+			.and('contain', 'Request failed with status code 500');
 	});
 });
 
@@ -367,6 +365,6 @@ describe('Car table delete', () => {
 
 		cy.get('[data-cy=car-table-delete-error]')
 			.should('be.visible')
-			.and('contain', 'Error: Request failed with status code 500');
+			.and('contain', 'Request failed with status code 500');
 	});
 });

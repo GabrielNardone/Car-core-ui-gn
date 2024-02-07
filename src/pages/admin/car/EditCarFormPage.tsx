@@ -25,64 +25,63 @@ interface INewCarState {
 	color: string;
 	passengers: string;
 	ac: string;
-	pricePerDay: string;
+	pricePerDay: number;
 }
 
 interface INewImageState {
-	picture: any;
+	picture: FileList;
 	pictureTitle: string;
 	pictureDescription: string;
 	pictureType: string;
 	pictureDate: string;
 }
 
-const NEW_CAR_INITIAL_STATE: INewCarState = {
-	brand: '',
-	model: '',
-	color: '',
-	passengers: '',
-	ac: '',
-	pricePerDay: '',
-};
 const NEW_CAR_IMAGES_INITIAL_STATE: INewImageState = {
-	picture: '',
+	picture: [] as unknown as FileList,
 	pictureTitle: '',
 	pictureDescription: '',
 	pictureType: '',
 	pictureDate: '',
 };
 
-export const CarEdit = () => {
-	const { state: carInfo } = useLocation();
-	const navigate = useNavigate();
-
+export const EditCarFormPage = () => {
 	const [carPictures, setCarPictures] = useState<ICarPicture[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
+	const navigate = useNavigate();
+
+	const { state: carInfo } = useLocation();
+
+	const NEW_CAR_INITIAL_STATE: INewCarState = {
+		brand: carInfo.brand,
+		model: carInfo.model,
+		color: carInfo.color,
+		passengers: carInfo.passengers,
+		ac: carInfo.ac,
+		pricePerDay: carInfo.pricePerDay,
+	};
 	const handleDeletePicture = async (pictureId: number): Promise<void> => {
 		try {
 			await deletePicture(pictureId);
 			notifyStatus(
 				NOTIFICATION_TYPE.DELETED,
-				'<span data-cy="close-car-edit-delete-picutre-alert">Ok</span>',
+				'close-car-edit-delete-picutre-alert',
 			);
 			setCarPictures((prevPictures) =>
 				prevPictures?.filter((picture) => picture.id !== pictureId),
 			);
 		} catch (error) {
-			console.log(error);
-			notifyStatus(
-				NOTIFICATION_TYPE.ERROR,
-				`<span data-cy="car-edit-delete-picture-error">${error}</span>`,
-			);
+			if (error instanceof Error) {
+				notifyStatus(
+					NOTIFICATION_TYPE.ERROR,
+					'car-edit-delete-picture-error',
+					error.message,
+				);
+			}
 		}
 	};
 	const onHandleDelete = (id: number): void => {
-		notifyConfirmation(
-			'<span data-cy="confirm-picture-delete-alert">Yes, delete it!</span>',
-			handleDeletePicture,
-			id,
-		);
+		notifyConfirmation('confirm-picture-delete-alert', handleDeletePicture, id);
 	};
 
 	const handleSubmitNewCar = async (values: INewCarState): Promise<void> => {
@@ -91,21 +90,20 @@ export const CarEdit = () => {
 				brand: values.brand || carInfo.brand,
 				model: values.model || carInfo.model,
 				color: values.color || carInfo.color,
-				pricePerDay: Number(values.pricePerDay) || carInfo.pricePerDay,
+				pricePerDay: values.pricePerDay || carInfo.pricePerDay,
 				passengers: Number(values.passengers) || carInfo.passengers,
 				ac: values.ac === 'true' ? true : false || carInfo.ac,
 			});
 
 			notifyStatus(
 				NOTIFICATION_TYPE.SUCCESS,
-				`<span data-cy="car-edit-success">${carInfo.brand} ${carInfo.model} (ID:${carInfo.id}) updated!</span>`,
+				'car-edit-success',
+				`Car with ID:${carInfo.id} updated!`,
 			);
 		} catch (error) {
-			console.log(error);
-			notifyStatus(
-				NOTIFICATION_TYPE.ERROR,
-				`<span data-cy="car-edit-error">${error}</span>`,
-			);
+			if (error instanceof Error) {
+				notifyStatus(NOTIFICATION_TYPE.ERROR, 'car-edit-error', error.message);
+			}
 		}
 	};
 
@@ -113,25 +111,30 @@ export const CarEdit = () => {
 		values: INewImageState,
 	): Promise<void> => {
 		try {
-			await createCarPicture({
+			const picture = await createCarPicture({
 				carId: carInfo.id,
-				picture: values.picture[0],
+				picture: values.picture,
 				title: values.pictureTitle,
 				description: values.pictureDescription,
 				type: values.pictureType,
 				date: values.pictureDate,
 			});
 
+			setCarPictures((prevPictures) => [...prevPictures, picture]);
+
 			notifyStatus(
 				NOTIFICATION_TYPE.SUCCESS,
-				`<span data-cy="car-edit-create-picture-success">New picture saved on ${carInfo.brand} ${carInfo.model} (ID:${carInfo.id})</span>`,
+				'car-edit-create-picture-success',
+				`New picture saved on ${carInfo.brand} ${carInfo.model} (ID:${carInfo.id})`,
 			);
 		} catch (error) {
-			console.log(error);
-			notifyStatus(
-				NOTIFICATION_TYPE.ERROR,
-				`<span data-cy="car-edit-create-picture-error">${error}</span>`,
-			);
+			if (error instanceof Error) {
+				notifyStatus(
+					NOTIFICATION_TYPE.ERROR,
+					'car-edit-create-picture-error',
+					error.message,
+				);
+			}
 		}
 	};
 
@@ -155,16 +158,19 @@ export const CarEdit = () => {
 	});
 
 	const fetchCarById = async (): Promise<void> => {
+		console.log('repeat');
 		try {
 			const car = await getCarById(carInfo.id);
 			setCarPictures(car.images || []);
 			setIsLoading(false);
 		} catch (error) {
-			console.log(error);
-			notifyStatus(
-				NOTIFICATION_TYPE.ERROR,
-				`<span data-cy="get-car-pictures-error-alert">${error}</span>`,
-			);
+			if (error instanceof Error) {
+				notifyStatus(
+					NOTIFICATION_TYPE.ERROR,
+					'get-car-pictures-error-alert',
+					error.message,
+				);
+			}
 		}
 	};
 
@@ -217,12 +223,12 @@ export const CarEdit = () => {
 										data-cy="car-edit-brand"
 										id="brand"
 										type="text"
-										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+										className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 										{...formikCar.getFieldProps('brand')}
 									/>
 									{formikCar.touched.brand && formikCar.errors.brand && (
 										<p data-cy="brand-error" className="text-red-500">
-											{formikCar.errors.brand}
+											{formikCar.errors.brand as string}
 										</p>
 									)}
 								</div>
@@ -240,12 +246,12 @@ export const CarEdit = () => {
 										data-cy="car-edit-model"
 										id="model"
 										type="text"
-										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+										className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 										{...formikCar.getFieldProps('model')}
 									/>
 									{formikCar.touched.model && formikCar.errors.model && (
 										<p data-cy="model-error" className="text-red-500">
-											{formikCar.errors.model}
+											{formikCar.errors.model as string}
 										</p>
 									)}
 								</div>
@@ -276,7 +282,7 @@ export const CarEdit = () => {
 									</select>
 									{formikCar.touched.color && formikCar.errors.color && (
 										<p data-cy="color-error" className="text-red-500">
-											{formikCar.errors.color}
+											{formikCar.errors.color as string}
 										</p>
 									)}
 								</div>
@@ -309,7 +315,7 @@ export const CarEdit = () => {
 									{formikCar.touched.passengers &&
 										formikCar.errors.passengers && (
 											<p data-cy="passengers-error" className="text-red-500">
-												{formikCar.errors.passengers}
+												{formikCar.errors.passengers as string}
 											</p>
 										)}
 								</div>
@@ -337,7 +343,7 @@ export const CarEdit = () => {
 									</select>
 									{formikCar.touched.ac && formikCar.errors.ac && (
 										<p data-cy="ac-error" className="text-red-500">
-											{formikCar.errors.ac}
+											{formikCar.errors.ac as string}
 										</p>
 									)}
 								</div>
@@ -352,16 +358,16 @@ export const CarEdit = () => {
 								</label>
 								<div className="mt-2">
 									<input
-										data-cy="car-edit-pricePerDay"
+										data-cy="car-edit-price-per-day"
 										type="number"
 										id="pricePerDay"
-										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+										className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 										{...formikCar.getFieldProps('pricePerDay')}
 									/>
 									{formikCar.touched.pricePerDay &&
 										formikCar.errors.pricePerDay && (
 											<p data-cy="pricePerDay-error" className="text-red-500">
-												{formikCar.errors.pricePerDay}
+												{formikCar.errors.pricePerDay as string}
 											</p>
 										)}
 								</div>
@@ -467,7 +473,7 @@ export const CarEdit = () => {
 											data-cy="car-edit-picture-error"
 											className="text-red-500"
 										>
-											{formikCarPictures.errors.picture as string}
+											{formikCarPictures.errors.picture as unknown as string}
 										</p>
 									)}
 							</div>
@@ -486,7 +492,7 @@ export const CarEdit = () => {
 										data-cy="car-edit-picture-title"
 										id="pictureTitle"
 										type="text"
-										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+										className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 										{...formikCarPictures.getFieldProps('pictureTitle')}
 									/>
 									{formikCarPictures.touched.pictureTitle &&
@@ -510,7 +516,7 @@ export const CarEdit = () => {
 										data-cy="car-edit-picture-description"
 										id="pictureDescription"
 										type="text"
-										className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+										className="block w-full rounded-md border-0 bg-white/5 px-1 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
 										{...formikCarPictures.getFieldProps('pictureDescription')}
 									/>
 									{formikCarPictures.touched.pictureDescription &&
@@ -586,12 +592,6 @@ export const CarEdit = () => {
 					</div>
 				</div>
 				<div className="mt-6 flex items-center justify-end gap-x-6">
-					<button
-						type="button"
-						className="text-sm font-semibold leading-6 text-white"
-					>
-						Cancel
-					</button>
 					<button
 						type="submit"
 						data-cy="submit-button"
