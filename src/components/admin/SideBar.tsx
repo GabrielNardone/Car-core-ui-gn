@@ -1,4 +1,5 @@
 import { KeyIcon } from '@heroicons/react/24/outline';
+import { UserIcon } from '@heroicons/react/24/solid';
 import { NavLink } from 'react-router-dom';
 
 const navigation = [
@@ -6,6 +7,11 @@ const navigation = [
 		name: 'Car',
 		href: '/admin/car',
 		icon: KeyIcon,
+	},
+	{
+		name: 'User',
+		href: '/admin/user',
+		icon: UserIcon,
 	},
 ];
 

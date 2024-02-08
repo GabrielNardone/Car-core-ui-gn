@@ -5,6 +5,9 @@ import { CarTablePage } from '@/pages/admin/car/CarTablePage';
 import { CreateCarFormPage } from '@/pages/admin/car/CreateCarFormPage';
 import { EditCarFormPage } from '@/pages/admin/car/EditCarFormPage';
 import { AdminPage } from '@/pages/admin/layout/AdminPage';
+import { CreateUserFormPage } from '@/pages/admin/user/CreateUserFormPage';
+import { EditUserFormPage } from '@/pages/admin/user/EditUserFormPage';
+import { UserTablePage } from '@/pages/admin/user/UserTablePage';
 
 import Root from '@pages/Root';
 import About from '@pages/about/About';
@@ -42,6 +45,18 @@ const router = createBrowserRouter([
 					{
 						path: '/admin/car-gallery/:id',
 						element: <CarGalleryPage />,
+					},
+					{
+						path: '/admin/user',
+						element: <UserTablePage />,
+					},
+					{
+						path: '/admin/user-form',
+						element: <CreateUserFormPage />,
+					},
+					{
+						path: '/admin/user-edit/:id',
+						element: <EditUserFormPage />,
 					},
 				],
 			},
