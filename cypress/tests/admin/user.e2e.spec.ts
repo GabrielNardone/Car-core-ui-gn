@@ -93,11 +93,13 @@ describe('User form', () => {
 
 describe('User form edit', () => {
 	beforeEach(() => {
-		cy.visit('/admin/user');
 		cy.intercept('GET', '/api/user', {
 			fixture: 'get-all-users-mock.json',
 			statusCode: 200,
 		}).as('getAllUsers');
+
+		cy.visit('/admin/user');
+
 		cy.intercept('GET', 'api/user/1', {
 			fixture: 'get-user-by-id-mock.json',
 			statusCode: 200,
@@ -143,20 +145,20 @@ describe('User form edit', () => {
 
 describe('User table delete', () => {
 	beforeEach(() => {
-		cy.visit('/admin/user');
 		cy.intercept('GET', '/api/user', {
 			fixture: 'get-all-users-mock.json',
 			statusCode: 200,
-		}).as('getAllUserRequest');
+		}).as('getAllUser');
+		cy.visit('/admin/user');
 	});
 
 	it('Should delete a user', () => {
-		cy.wait('@getAllUserRequest');
+		cy.wait('@getAllUser');
 
 		cy.intercept('DELETE', '/api/user/1', {
 			body: { data: true },
 			statusCode: 200,
-		}).as('deleteUserRequest');
+		}).as('deleteUser');
 
 		cy.get('[data-cy=user-table-delete]').should('be.visible').eq(0).click();
 		cy.get('[data-cy=confirm-user-table-delete-alert]')
@@ -170,7 +172,7 @@ describe('User table delete', () => {
 		cy.get('[data-cy=user-table]').should('have.length', 1);
 	});
 
-	it('Should display error alert when server error de', () => {
+	it('Should display error alert when server error deleting user', () => {
 		cy.intercept('DELETE', '/api/user/1', {
 			statusCode: 500,
 		}).as('deleteUserError');

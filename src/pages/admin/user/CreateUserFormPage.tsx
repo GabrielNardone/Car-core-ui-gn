@@ -47,7 +47,6 @@ export const CreateUserFormPage = () => {
 				`${values.firstName} ${values.lastName} created!`,
 			);
 		} catch (error: unknown) {
-			console.log(error);
 			if (error instanceof Error) {
 				notifyStatus(
 					NOTIFICATION_TYPE.ERROR,
@@ -61,8 +60,8 @@ export const CreateUserFormPage = () => {
 	const formik = useFormik({
 		initialValues: NEW_USER_INITIAL_STATE,
 		validationSchema: createUserSchema,
-		onSubmit: (values) => {
-			handleSubmit({ ...values, dob: new Date(values.dob) });
+		onSubmit: async (values) => {
+			await handleSubmit({ ...values, dob: new Date(values.dob) });
 			formik.resetForm();
 		},
 	});

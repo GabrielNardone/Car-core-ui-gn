@@ -71,8 +71,8 @@ export const EditUserFormPage = () => {
 		enableReinitialize: true,
 		initialValues: EDIT_USER_INITIAL_STATE,
 		validationSchema: editUserSchema,
-		onSubmit: (values) => {
-			handleSubmit({ ...values, dob: values.dob });
+		onSubmit: async (values) => {
+			await handleSubmit({ ...values, dob: values.dob });
 			formik.resetForm();
 		},
 	});

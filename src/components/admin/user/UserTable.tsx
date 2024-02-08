@@ -16,6 +16,12 @@ export const UserTable = ({ users, handleDeleteUser }: IUserTable) => {
 				<tr>
 					<th
 						scope="col"
+						className="px-3 py-3.5 text-left text-sm font-semibold text-white"
+					>
+						ID
+					</th>
+					<th
+						scope="col"
 						className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0"
 					>
 						Name
@@ -55,6 +61,9 @@ export const UserTable = ({ users, handleDeleteUser }: IUserTable) => {
 			<tbody className="divide-y divide-gray-800">
 				{users?.map((user) => (
 					<tr key={user.id} data-cy="user-table">
+						<td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+							{user.id}
+						</td>
 						<td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">
 							{`${user.firstName} ${user.lastName}`}
 						</td>
