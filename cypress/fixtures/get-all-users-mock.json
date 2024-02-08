@@ -1,0 +1,20 @@
+[
+	{
+		"id": 1,
+		"firstName": "Erik",
+		"lastName": "Vampiro",
+		"dob": "1994-02-04",
+		"email": "erik@gmail.com",
+		"address": "Lugano 1234",
+		"country": "Argentina"
+	},
+	{
+		"id": 2,
+		"firstName": "Mauto",
+		"lastName": "Zangaro",
+		"dob": "1992-02-04",
+		"email": "mauro@gmail.com",
+		"address": "Caballito 1234",
+		"country": "Argentina"
+	}
+]
