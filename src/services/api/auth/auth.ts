@@ -50,7 +50,6 @@ export const register = async (signUpDto: ISignUpDto): Promise<IUser> => {
 export const login = async (loginDto: ILoginDto): Promise<ITokenGroup> => {
 	try {
 		const { data } = await Api.post('/auth/sign-in', loginDto);
-		console.log(data);
 
 		return data;
 	} catch (error) {

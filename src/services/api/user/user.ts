@@ -27,6 +27,7 @@ export interface IUser {
 	address: string;
 	country: string;
 	role: string;
+	externalId: string;
 	document?: IDocument[];
 }
 
@@ -74,6 +75,19 @@ export const getUserById = async (id: number): Promise<IUser> => {
 		}
 		console.log(error);
 		throw new Error(USER_ERRORS_MESSAGES.GET_USER_BY_ID_ERROR);
+	}
+};
+
+export const getMe = async (): Promise<IUser> => {
+	try {
+		const response = await Api.get(`/${RESOURCE}/me`);
+		return response.data;
+	} catch (error: unknown) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+		console.log(error);
+		throw new Error(USER_ERRORS_MESSAGES.USER_NOT_FOUND);
 	}
 };
 

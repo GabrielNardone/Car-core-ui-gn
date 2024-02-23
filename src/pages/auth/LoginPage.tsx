@@ -20,8 +20,10 @@ export const LoginPage = () => {
 	const navigate = useNavigate();
 	const handleSubmit = async (values: ILoginState) => {
 		try {
-			await login(values);
+			const tokenGroup = await login(values);
+			localStorage.setItem('tokenGroup', JSON.stringify(tokenGroup));
 			navigate('/');
+			location.reload();
 		} catch (error) {
 			if (error instanceof Error) {
 				notifyStatus(
