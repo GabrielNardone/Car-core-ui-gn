@@ -44,7 +44,6 @@ export const register = async (signUpDto: ISignUpDto): Promise<IUser> => {
 		if (error instanceof AxiosError) {
 			throw new Error(error.message);
 		}
-		console.log(error);
 		throw new Error(AUTH_ERRORS_MESSAGES.REGISTER_ERROR);
 	}
 };
