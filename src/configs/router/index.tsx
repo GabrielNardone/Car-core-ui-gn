@@ -8,6 +8,10 @@ import { AdminPage } from '@/pages/admin/layout/AdminPage';
 import { CreateUserFormPage } from '@/pages/admin/user/CreateUserFormPage';
 import { EditUserFormPage } from '@/pages/admin/user/EditUserFormPage';
 import { UserTablePage } from '@/pages/admin/user/UserTablePage';
+import { ChangePassword } from '@/pages/auth/ChangePassword';
+import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage';
+import { LoginPage } from '@/pages/auth/LoginPage';
+import { RegisterPage } from '@/pages/auth/RegisterPage';
 
 import Root from '@pages/Root';
 import About from '@pages/about/About';
@@ -25,6 +29,22 @@ const router = createBrowserRouter([
 			{
 				path: '/about',
 				element: <About />,
+			},
+			{
+				path: '/login',
+				element: <LoginPage />,
+			},
+			{
+				path: '/register',
+				element: <RegisterPage />,
+			},
+			{
+				path: '/forgot-password',
+				element: <ForgotPasswordPage />,
+			},
+			{
+				path: '/change-password',
+				element: <ChangePassword />,
 			},
 			{
 				path: '/admin',
