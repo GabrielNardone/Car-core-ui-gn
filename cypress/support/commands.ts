@@ -44,12 +44,6 @@ Cypress.Commands.add('getBySelLike', (selector, ...args) => {
 	return cy.get(`[data-test*=${selector}]`, ...args);
 });
 
-declare namespace Cypress {
-	interface Chainable {
-		login(username: string, password: string): Chainable<void>;
-	}
-}
-
 Cypress.Commands.add('login', (email: string, password: string) => {
 	cy.intercept('POST', '/api/auth/login', {
 		fixture: 'login-mock.json',
