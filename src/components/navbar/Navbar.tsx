@@ -19,21 +19,31 @@ export const Navbar = () => {
 				<div className="hidden w-full md:block md:w-auto" id="navbar-default">
 					<ul className="font-medium flex flex-col p-4 md:p-0 mt-4 rounded-lg md:flex-row md:items-center md:space-x-8 md:mt-0 ">
 						<li>
-							<Link to="/" className="block text-black  dark:text-white ">
+							<Link to="/" className=" text-black  dark:text-white ">
 								Home
 							</Link>
 						</li>
 						<li>
-							<Link
-								to="/about"
-								className="block text-black rounded dark:text-white "
-							>
+							<Link to="/about" className=" text-black dark:text-white ">
 								About
 							</Link>
 						</li>
 						<li>
+							{state?.status === 'authenticated' &&
+								state?.currentUser?.role === 'admin' && (
+									<Link
+										data-cy="admin-page-link"
+										to="/admin"
+										className=" text-black dark:text-green-500 "
+									>
+										Admin
+									</Link>
+								)}
+						</li>
+						<li>
 							{state?.status === 'authenticated' ? (
 								<button
+									data-cy="logout-button"
 									className="px-4 py-1 bg-red-600 opacity-70 text-black rounded dark:text-white hover:opacity-100"
 									onClick={() => logoutUser()}
 								>
@@ -41,6 +51,7 @@ export const Navbar = () => {
 								</button>
 							) : (
 								<Link
+									data-cy="login-page-link"
 									to="/login"
 									className="px-4 py-1 bg-blue-700 rounded-md block text-black dark:text-white "
 								>

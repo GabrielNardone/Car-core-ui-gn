@@ -1,4 +1,8 @@
 describe('Car table', () => {
+	beforeEach(() => {
+		cy.login('erik@gmail.com', 'Erik1234');
+	});
+
 	const GALLERY_URL = 'http://localhost:3000/admin/car-gallery/2';
 
 	it('Should display a list of cars', () => {
@@ -6,7 +10,9 @@ describe('Car table', () => {
 			fixture: 'get-all-cars-mock.json',
 			statusCode: 200,
 		}).as('getAllCars');
-		cy.visit('/admin/car');
+
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
 
 		cy.wait('@getAllCars');
 
@@ -27,7 +33,9 @@ describe('Car table', () => {
 		cy.intercept('GET', '/api/car', {
 			statusCode: 500,
 		}).as('getAllCarsError');
-		cy.visit('/admin/car');
+
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
 
 		cy.get('[data-cy=get-all-cars-error-alert]')
 			.should('be.visible')
@@ -37,7 +45,11 @@ describe('Car table', () => {
 
 describe('Car create form', () => {
 	beforeEach(() => {
-		cy.visit('/admin/car-form');
+		cy.login('erik@gmail.com', 'Erik1234');
+		cy.intercept('GET', '/api/car', {
+			fixture: 'get-all-cars-mock.json',
+			statusCode: 200,
+		}).as('getAllCars');
 		cy.intercept('POST', '/api/car', {
 			id: 1,
 		}).as('newCar');
@@ -47,6 +59,12 @@ describe('Car create form', () => {
 	});
 
 	it('Should create a new car', () => {
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
+
+		cy.get('[data-cy=add-car-link]').click();
+
 		cy.get('[data-cy=car-create-brand]').type('Toyota');
 		cy.get('[data-cy=car-create-model]').type('heroic');
 		cy.get('[data-cy=car-create-color]').select('black');
@@ -78,6 +96,11 @@ describe('Car create form', () => {
 	});
 
 	it('Should display errors if inupts don´t match validations', () => {
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
+		cy.get('[data-cy=add-car-link]').click();
+
 		cy.get('[data-cy=car-create-brand]').type('To');
 		cy.get('[data-cy=car-create-price-per-day]').type('0');
 		cy.get('[data-cy=car-create-picture-title]').type('ca');
@@ -102,6 +125,11 @@ describe('Car create form', () => {
 		cy.intercept('POST', '/api/car', {
 			statusCode: 500,
 		}).as('newCarError');
+
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
+		cy.get('[data-cy=add-car-link]').click();
 
 		cy.get('[data-cy=car-create-brand]').type('Toyota');
 		cy.get('[data-cy=car-create-model]').type('heroic');
@@ -141,6 +169,11 @@ describe('Car create form', () => {
 			statusCode: 422,
 		}).as('newPictureError');
 
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
+		cy.get('[data-cy=add-car-link]').click();
+
 		cy.get('[data-cy=car-create-brand]').type('Toyota');
 		cy.get('[data-cy=car-create-model]').type('heroic');
 		cy.get('[data-cy=car-create-color]').select('black');
@@ -177,13 +210,11 @@ describe('Car create form', () => {
 
 describe('Car edit form', () => {
 	beforeEach(() => {
+		cy.login('erik@gmail.com', 'Erik1234');
 		cy.intercept('GET', '/api/car', {
 			fixture: 'get-all-cars-mock.json',
 			statusCode: 200,
 		}).as('getAllCars');
-
-		cy.visit('/admin/car');
-
 		cy.intercept('GET', '/api/car/2', {
 			fixture: 'get-car-by-id-mock.json',
 			statusCode: 200,
@@ -205,6 +236,10 @@ describe('Car edit form', () => {
 			statusCode: 500,
 		}).as('getCarByIdError');
 
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
+
 		cy.get('[data-cy=edit-car-2]').click();
 
 		cy.wait('@getCarByIdError');
@@ -216,6 +251,9 @@ describe('Car edit form', () => {
 	});
 
 	it('Should edit car information', () => {
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
 		cy.get('[data-cy=edit-car-2]').click();
 
 		cy.get('[data-cy=car-edit-brand]').type('VolksWagen');
@@ -233,6 +271,9 @@ describe('Car edit form', () => {
 	});
 
 	it('Should create a new car image', () => {
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
 		cy.get('[data-cy=edit-car-2]').click();
 
 		cy.get('[type="file"]').selectFile(
@@ -264,6 +305,10 @@ describe('Car edit form', () => {
 			statusCode: 422,
 		}).as('newPictureError');
 
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
+
 		cy.get('[data-cy=edit-car-2]').click();
 
 		cy.get('[type="file"]').selectFile(
@@ -291,6 +336,10 @@ describe('Car edit form', () => {
 	});
 
 	it('Should delete a car picture', () => {
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
+
 		cy.get('[data-cy=edit-car-2]').click();
 
 		cy.get('[data-cy=car-edit-delete-picture]')
@@ -307,6 +356,10 @@ describe('Car edit form', () => {
 	});
 
 	it('Should display error when deleting a car picture', () => {
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
+
 		cy.get('[data-cy=edit-car-2]').click();
 
 		cy.intercept('DELETE', '/api/picture/1', {
@@ -328,7 +381,7 @@ describe('Car edit form', () => {
 
 describe('Car table delete', () => {
 	beforeEach(() => {
-		cy.visit('/admin/car');
+		cy.login('erik@gmail.com', 'Erik1234');
 		cy.intercept('GET', '/api/car', {
 			fixture: 'get-all-cars-mock.json',
 			statusCode: 200,
@@ -336,12 +389,14 @@ describe('Car table delete', () => {
 	});
 
 	it('Should display a list of cars', () => {
-		cy.wait('@getAllCars');
-
 		cy.intercept('DELETE', '/api/car/2', {
 			body: { data: true },
 			statusCode: 200,
 		}).as('deleteCar');
+
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
 
 		cy.get('[data-cy=car-table-delete-car]').should('be.visible').eq(0).click();
 		cy.get('[data-cy=confirm-car-delete-alert]').should('be.visible').click();
@@ -354,11 +409,13 @@ describe('Car table delete', () => {
 	});
 
 	it('Should display error when deleting a car', () => {
-		cy.wait('@getAllCars');
-
 		cy.intercept('DELETE', '/api/car/2', {
 			statusCode: 500,
 		}).as('deleteCarError');
+
+		cy.get('[data-cy=admin-page-link]').click();
+		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.wait('@getAllCars');
 
 		cy.get('[data-cy=car-table-delete-car]').should('be.visible').eq(0).click();
 		cy.get('[data-cy=confirm-car-delete-alert]').should('be.visible').click();
