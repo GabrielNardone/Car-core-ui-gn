@@ -50,7 +50,6 @@ export const AuthContextProvider = ({ children }: IContextProps) => {
 		queryFn: getCurrentUser,
 		enabled: state.status === 'not-authenticated',
 	});
-	console.log(state);
 
 	return (
 		<AuthContext.Provider
