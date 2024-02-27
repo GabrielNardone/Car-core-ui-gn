@@ -77,19 +77,6 @@ export const getUserById = async (id: number): Promise<IUser> => {
 	}
 };
 
-export const createUser = async (user: ICreateUserDto): Promise<number> => {
-	try {
-		const response = await Api.post(`/${RESOURCE}`, user);
-		return response.status;
-	} catch (error: unknown) {
-		if (error instanceof AxiosError) {
-			throw new Error(error.message);
-		}
-		console.log(error);
-		throw new Error(USER_ERRORS_MESSAGES.CREATE_USER_ERROR);
-	}
-};
-
 export const editUser = async (
 	id: number,
 	user: IEditUserDto,

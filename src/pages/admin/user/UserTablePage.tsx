@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { UserTable } from '@/components/admin/user/UserTable';
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
@@ -66,14 +65,6 @@ export const UserTablePage = () => {
 								<p className="mt-2 text-sm text-gray-300">
 									A list of all the users in your account.
 								</p>
-							</div>
-							<div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-								<Link
-									to={'/admin/user-form'}
-									className="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-								>
-									Add user
-								</Link>
 							</div>
 						</div>
 						<div className="mt-8 flow-root">
