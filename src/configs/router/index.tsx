@@ -4,18 +4,19 @@ import { CarGalleryPage } from '@/pages/admin/car/CarGalleryPage';
 import { CarTablePage } from '@/pages/admin/car/CarTablePage';
 import { CreateCarFormPage } from '@/pages/admin/car/CreateCarFormPage';
 import { EditCarFormPage } from '@/pages/admin/car/EditCarFormPage';
-import { AdminPage } from '@/pages/admin/layout/AdminPage';
+import { AdminLayout } from '@/pages/admin/layout/AdminLayout';
 import { CreateUserFormPage } from '@/pages/admin/user/CreateUserFormPage';
 import { EditUserFormPage } from '@/pages/admin/user/EditUserFormPage';
 import { UserTablePage } from '@/pages/admin/user/UserTablePage';
-import { ChangePassword } from '@/pages/auth/ChangePassword';
+import { ChangePasswordPage } from '@/pages/auth/ChangePasswordPage';
 import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
+import { DetailPage } from '@/pages/home/DetailPage';
+import HomePage from '@/pages/home/HomePage';
 
 import Root from '@pages/Root';
 import About from '@pages/about/About';
-import Home from '@pages/home/Home';
 
 const router = createBrowserRouter([
 	{
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
 		children: [
 			{
 				index: true,
-				element: <Home />,
+				element: <HomePage />,
+			},
+			{
+				path: '/detail/:id',
+				element: <DetailPage />,
 			},
 			{
 				path: '/about',
@@ -44,11 +49,11 @@ const router = createBrowserRouter([
 			},
 			{
 				path: '/change-password',
-				element: <ChangePassword />,
+				element: <ChangePasswordPage />,
 			},
 			{
 				path: '/admin',
-				element: <AdminPage />,
+				element: <AdminLayout />,
 				children: [
 					{
 						path: '/admin/car',

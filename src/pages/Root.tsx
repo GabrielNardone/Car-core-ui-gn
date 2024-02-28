@@ -6,7 +6,7 @@ export default function Root() {
 	return (
 		<div className="flex flex-col h-screen">
 			<Navbar />
-			<div id="pages" className="flex-1">
+			<div id="pages" className="flex-1 bg-gray-900">
 				<Outlet />
 			</div>
 		</div>

@@ -19,7 +19,7 @@ const INITIAL_CHANGE_PASSWORD_STATE: IChangePasswordState = {
 	confirmationCode: '',
 	newPassword: '',
 };
-export const ChangePassword = () => {
+export const ChangePasswordPage = () => {
 	const navigate = useNavigate();
 
 	const handleSubmit = async (values: IChangePasswordState) => {
