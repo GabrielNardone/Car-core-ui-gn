@@ -1,28 +1,13 @@
 import { AxiosError } from 'axios';
 
 import { PICTURES_ERRORS_MESSAGES } from '@/errors/picture-errors-messages.enum';
+import {
+	ICarPicture,
+	ICreateCarPictureDto,
+} from '@/interfaces/pictures.interfaces';
 import Api from '@/services';
 
 const RESOURCE = 'picture';
-export interface ICarPicture {
-	id: number;
-	createdAt: Date;
-	updatedAt: Date;
-	src: string;
-	description: string;
-	title: string;
-	type: string;
-	date: Date;
-}
-
-interface ICreateCarPictureDto {
-	carId: number;
-	picture: FileList;
-	title: string;
-	description: string;
-	type: string;
-	date: string;
-}
 export const createCarPicture = async (
 	createCarPictureDto: ICreateCarPictureDto,
 ): Promise<ICarPicture> => {

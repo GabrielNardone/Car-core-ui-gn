@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
 import { createUserSchema } from '@/helpers/validations/user-validations';
-import { ICreateUserDto, createUser } from '@/services/api/user/user';
+import { ICreateUserDto, UserRole } from '@/interfaces/user.interfaces';
+import { createUser } from '@/services/api/user/user';
 
 interface INewUserState {
 	firstName: string;
@@ -13,7 +14,7 @@ interface INewUserState {
 	email: string;
 	address: string;
 	country: string;
-	role: string;
+	role: UserRole;
 }
 
 const NEW_USER_INITIAL_STATE: INewUserState = {
@@ -23,7 +24,7 @@ const NEW_USER_INITIAL_STATE: INewUserState = {
 	email: '',
 	address: '',
 	country: '',
-	role: '',
+	role: '' as UserRole,
 };
 
 export const CreateUserFormPage = () => {

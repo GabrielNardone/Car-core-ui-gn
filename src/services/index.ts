@@ -9,10 +9,9 @@ Api.interceptors.request.use(
 		const tokenGroup = localStorage.getItem('tokenGroup');
 
 		if (tokenGroup) {
-			config.headers.set(
-				'Authorization',
-				`Bearer ${JSON.parse(tokenGroup).AccessToken}`,
-			);
+			config.headers['Authorization'] = `Bearer ${
+				JSON.parse(tokenGroup).AccessToken
+			}`;
 		}
 
 		return config;

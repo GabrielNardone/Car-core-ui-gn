@@ -1,7 +1,9 @@
 import { TruckIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
-import { useAuthContext } from '@/context/useAuthContext';
+import { AuthStatus } from '@/context/authReducer';
+import { useAuthContext } from '@/hooks/useAuthContext';
+import { UserRole } from '@/interfaces/user.interfaces';
 
 export const Navbar = () => {
 	const { state, logoutUser } = useAuthContext();
@@ -29,8 +31,8 @@ export const Navbar = () => {
 							</Link>
 						</li>
 						<li>
-							{state?.status === 'authenticated' &&
-								state?.currentUser?.role === 'admin' && (
+							{state?.status === AuthStatus.AUTHENTICATED &&
+								state?.currentUser?.role === UserRole.ADMIN && (
 									<Link
 										data-cy="admin-page-link"
 										to="/admin"

@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { CarTable } from '@/components/admin/car/CarTable';
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
-import { ICar, deleteCar, getAllCars } from '@/services/api/car/car';
+import { ICar } from '@/interfaces/car.interfaces';
+import { deleteCar, getAllCars } from '@/services/api/car/car';
 
 export const CarTablePage = () => {
 	const [cars, setCars] = useState<ICar[]>([]);

@@ -1,40 +1,15 @@
 import { AxiosError } from 'axios';
 
-import { IUser } from '../user/user';
-
 import { AUTH_ERRORS_MESSAGES } from '@/errors/auth-errors-messages.enum';
+import {
+	IConfirmPasswordDto,
+	IForgotPasswordDto,
+	ILoginDto,
+	ISignUpDto,
+	ITokenGroup,
+} from '@/interfaces/auth.interfaces';
+import { IUser } from '@/interfaces/user.interfaces';
 import Api from '@/services';
-
-interface ILoginDto {
-	email: string;
-	password: string;
-}
-
-interface ISignUpDto {
-	firstName: string;
-	lastName: string;
-	email: string;
-	password: string;
-	dob: string;
-	address: string;
-	country: string;
-}
-
-interface IForgotPasswordDto {
-	email: string;
-}
-
-interface IConfirmPasswordDto {
-	email: string;
-	confirmationCode: string;
-	newPassword: string;
-}
-
-interface ITokenGroup {
-	AccessToken?: string;
-	IdToken?: string;
-	RefreshToken?: string;
-}
 
 export const register = async (signUpDto: ISignUpDto): Promise<IUser> => {
 	try {

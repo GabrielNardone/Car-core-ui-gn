@@ -45,10 +45,11 @@ Cypress.Commands.add('getBySelLike', (selector, ...args) => {
 });
 
 Cypress.Commands.add('login', (email: string, password: string) => {
-	cy.intercept('POST', '/api/auth/login', {
+	cy.intercept('POST', '/api/auth/sign-in', {
 		fixture: 'login-mock.json',
 		statusCode: 200,
-	}).as('login');
+	}).as('loginUser');
+
 	cy.intercept('GET', '/api/user/me', {
 		fixture: 'get-me-mock.json',
 		statusCode: 200,
@@ -57,5 +58,5 @@ Cypress.Commands.add('login', (email: string, password: string) => {
 	cy.visit('/login');
 	cy.get('[data-cy=login-email]').type(email);
 	cy.get('[data-cy=login-password]').type(password);
-	cy.get('[data-cy=login-form]').click();
+	cy.get('[data-cy=login-form]').submit();
 });

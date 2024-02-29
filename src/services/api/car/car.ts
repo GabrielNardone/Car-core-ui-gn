@@ -1,42 +1,11 @@
 import { AxiosError } from 'axios';
 
 import Api from '../../index';
-import { ICarPicture } from '../picture/picture';
 
 import { CAR_ERRORS_MESSAGES } from '@/errors/car-errors-messages.enum';
+import { ICar, IEditCarDto, INewCarDto } from '@/interfaces/car.interfaces';
 
 const RESOURCE = 'car';
-
-export interface ICar {
-	id: number;
-	createdAt: Date;
-	updatedAt: Date;
-	brand: string;
-	model: string;
-	color: string;
-	passengers: number;
-	ac: boolean;
-	pricePerDay: number;
-	images: ICarPicture[];
-}
-
-export interface INewCarDto {
-	brand: string;
-	model: string;
-	color: string;
-	passengers: number;
-	ac: boolean | string;
-	pricePerDay: number;
-}
-
-interface IEditCarDto {
-	brand?: string;
-	model?: string;
-	color?: string;
-	passengers?: number;
-	ac?: boolean | string;
-	pricePerDay?: number;
-}
 
 export const getAllCars = async (): Promise<ICar[]> => {
 	try {

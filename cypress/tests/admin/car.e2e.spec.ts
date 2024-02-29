@@ -1,6 +1,6 @@
 describe('Car table', () => {
 	beforeEach(() => {
-		cy.login('erik@gmail.com', 'Erik1234');
+		cy.login('gabriel@gmail.com', 'Gabriel12');
 	});
 
 	const GALLERY_URL = 'http://localhost:3000/admin/car-gallery/2';

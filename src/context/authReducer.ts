@@ -1,59 +1,57 @@
-import { IUser } from '@/services/api/user/user';
+import { TOKEN_GROUP_KEY } from './constants';
 
-type StatusType = 'checking' | 'authenticated' | 'not-authenticated';
-type ActionType =
-	| { type: 'LOGIN'; payload: IUser }
-	| { type: 'LOGOUT' }
-	| { type: 'CHECKING_CREDENTIALS' };
+import { ITokenGroup } from '@/interfaces/auth.interfaces';
+import { IUser } from '@/interfaces/user.interfaces';
 
-export interface IAuthState {
-	status: StatusType;
-	currentUser: IUser | undefined;
+export enum AuthReducerAction {
+	SET_SESSION = 'SET_SESSION',
+	LOGOUT = 'LOGOUT',
+	SET_USER_DATA = 'SET_USER_DATA',
 }
+export enum AuthStatus {
+	AUTHENTICATED = 'authenticated',
+	NOT_AUTHENTICATED = 'not-authenticated',
+}
+export interface IAuthState {
+	status: AuthStatus;
+	currentUser: IUser | undefined;
+	tokenGroup: ITokenGroup | null;
+}
+type AuthReducerActionType =
+	| { type: AuthReducerAction.SET_SESSION; payload: ITokenGroup }
+	| { type: AuthReducerAction.LOGOUT }
+	| { type: AuthReducerAction.SET_USER_DATA; payload: IUser };
+
+export const authInit = (initialState: IAuthState): IAuthState => {
+	const tokenGroup = localStorage.getItem(TOKEN_GROUP_KEY);
+
+	return {
+		...initialState,
+		tokenGroup: tokenGroup ? JSON.parse(tokenGroup) : initialState.tokenGroup,
+	};
+};
 
 export const authReducer = (
 	state: IAuthState,
-	action: ActionType,
+	action: AuthReducerActionType,
 ): IAuthState => {
 	switch (action.type) {
-		case 'LOGIN':
-			return {
-				status: 'authenticated',
-				currentUser: {
-					id: action.payload.id,
-					createdAt: action.payload.createdAt,
-					updatedAt: action.payload.updatedAt,
-					externalId: action.payload.externalId,
-					firstName: action.payload.firstName,
-					lastName: action.payload.lastName,
-					email: action.payload.email,
-					dob: action.payload.dob,
-					address: action.payload.address,
-					country: action.payload.country,
-					role: action.payload.role,
-				},
-			};
-		case 'LOGOUT':
-			return {
-				status: 'not-authenticated',
-				currentUser: {
-					id: 0,
-					createdAt: {} as Date,
-					updatedAt: {} as Date,
-					externalId: '',
-					firstName: '',
-					lastName: '',
-					email: '',
-					dob: {} as Date,
-					address: '',
-					country: '',
-					role: '',
-				},
-			};
-		case 'CHECKING_CREDENTIALS':
+		case AuthReducerAction.SET_SESSION:
 			return {
 				...state,
-				status: 'checking',
+				tokenGroup: action.payload,
+			};
+		case AuthReducerAction.LOGOUT:
+			return {
+				tokenGroup: null,
+				status: AuthStatus.NOT_AUTHENTICATED,
+				currentUser: undefined,
+			};
+		case AuthReducerAction.SET_USER_DATA:
+			return {
+				...state,
+				status: AuthStatus.AUTHENTICATED,
+				currentUser: action.payload,
 			};
 		default:
 			return state;

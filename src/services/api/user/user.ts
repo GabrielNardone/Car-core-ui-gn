@@ -3,53 +3,13 @@ import { AxiosError } from 'axios';
 import Api from '../../index';
 
 import { USER_ERRORS_MESSAGES } from '@/errors/user-errors-enum';
+import {
+	ICreateUserDto,
+	IEditUserDto,
+	IUser,
+} from '@/interfaces/user.interfaces';
 
 const RESOURCE = 'user';
-export interface IDocument {
-	id: number;
-	createdAt: Date;
-	updatedAt: Date;
-	url: string;
-	src: string;
-	description: string;
-	title: string;
-	user: IUser;
-}
-
-export interface IUser {
-	id: number;
-	createdAt: Date;
-	updatedAt: Date;
-	firstName: string;
-	lastName: string;
-	dob: Date;
-	email: string;
-	address: string;
-	country: string;
-	role: string;
-	externalId: string;
-	document?: IDocument[];
-}
-
-export interface ICreateUserDto {
-	firstName: string;
-	lastName: string;
-	dob: Date;
-	email: string;
-	address: string;
-	country: string;
-	role: string;
-}
-
-export interface IEditUserDto {
-	firstName?: string;
-	lastName?: string;
-	dob?: Date;
-	email?: string;
-	address?: string;
-	country?: string;
-	role?: string;
-}
 
 export const getAllUsers = async (): Promise<IUser[]> => {
 	try {
