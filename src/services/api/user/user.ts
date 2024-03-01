@@ -3,11 +3,7 @@ import { AxiosError } from 'axios';
 import Api from '../../index';
 
 import { USER_ERRORS_MESSAGES } from '@/errors/user-errors-enum';
-import {
-	ICreateUserDto,
-	IEditUserDto,
-	IUser,
-} from '@/interfaces/user.interfaces';
+import { IEditUserDto, IUser } from '@/interfaces/user.interfaces';
 
 const RESOURCE = 'user';
 
@@ -48,19 +44,6 @@ export const getMe = async (): Promise<IUser> => {
 		}
 		console.log(error);
 		throw new Error(USER_ERRORS_MESSAGES.USER_NOT_FOUND);
-	}
-};
-
-export const createUser = async (user: ICreateUserDto): Promise<number> => {
-	try {
-		const response = await Api.post(`/${RESOURCE}`, user);
-		return response.status;
-	} catch (error: unknown) {
-		if (error instanceof AxiosError) {
-			throw new Error(error.message);
-		}
-		console.log(error);
-		throw new Error(USER_ERRORS_MESSAGES.CREATE_USER_ERROR);
 	}
 };
 

@@ -6,7 +6,6 @@ import { CarTablePage } from '@/pages/admin/car/CarTablePage';
 import { CreateCarFormPage } from '@/pages/admin/car/CreateCarFormPage';
 import { EditCarFormPage } from '@/pages/admin/car/EditCarFormPage';
 import { AdminPage } from '@/pages/admin/layout/AdminPage';
-import { CreateUserFormPage } from '@/pages/admin/user/CreateUserFormPage';
 import { EditUserFormPage } from '@/pages/admin/user/EditUserFormPage';
 import { UserTablePage } from '@/pages/admin/user/UserTablePage';
 import { ChangePassword } from '@/pages/auth/ChangePassword';
@@ -73,10 +72,6 @@ const router = createBrowserRouter([
 							{
 								path: '/admin/user',
 								element: <UserTablePage />,
-							},
-							{
-								path: '/admin/user-form',
-								element: <CreateUserFormPage />,
 							},
 							{
 								path: '/admin/user-edit/:id',
