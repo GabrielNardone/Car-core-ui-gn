@@ -12,7 +12,6 @@ import { TOKEN_GROUP_KEY } from './constants';
 
 import { useFetchCurrentUser } from '@/hooks/useFetchCurrentUser';
 import { ITokenGroup } from '@/interfaces/auth.interfaces';
-import { IUser } from '@/interfaces/user.interfaces';
 
 const INITIAL_STATE: IAuthState = {
 	status: AuthStatus.NOT_AUTHENTICATED,
@@ -27,9 +26,7 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
 		localStorage.setItem(TOKEN_GROUP_KEY, JSON.stringify(payload));
 		dispatch({ type: AuthReducerAction.SET_SESSION, payload });
 	};
-	const setUserData = (payload: IUser) => {
-		dispatch({ type: AuthReducerAction.SET_USER_DATA, payload });
-	};
+
 	const logoutUser = () => {
 		localStorage.removeItem(TOKEN_GROUP_KEY);
 		dispatch({ type: AuthReducerAction.LOGOUT });
@@ -39,14 +36,12 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
 
 	useEffect(() => {
 		if (user) {
-			setUserData(user);
+			dispatch({ type: AuthReducerAction.SET_USER_DATA, payload: user });
 		}
 	}, [user]);
 
 	return (
-		<AuthContext.Provider
-			value={{ state, setSession, logoutUser, setUserData }}
-		>
+		<AuthContext.Provider value={{ state, setSession, logoutUser }}>
 			{children}
 		</AuthContext.Provider>
 	);
