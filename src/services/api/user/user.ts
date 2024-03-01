@@ -3,52 +3,9 @@ import { AxiosError } from 'axios';
 import Api from '../../index';
 
 import { USER_ERRORS_MESSAGES } from '@/errors/user-errors-enum';
+import { IEditUserDto, IUser } from '@/interfaces/user.interfaces';
 
 const RESOURCE = 'user';
-export interface IDocument {
-	id: number;
-	createdAt: Date;
-	updatedAt: Date;
-	url: string;
-	src: string;
-	description: string;
-	title: string;
-	user: IUser;
-}
-
-export interface IUser {
-	id: number;
-	createdAt: Date;
-	updatedAt: Date;
-	firstName: string;
-	lastName: string;
-	dob: Date;
-	email: string;
-	address: string;
-	country: string;
-	role: string;
-	document?: IDocument[];
-}
-
-export interface ICreateUserDto {
-	firstName: string;
-	lastName: string;
-	dob: Date;
-	email: string;
-	address: string;
-	country: string;
-	role: string;
-}
-
-export interface IEditUserDto {
-	firstName?: string;
-	lastName?: string;
-	dob?: Date;
-	email?: string;
-	address?: string;
-	country?: string;
-	role?: string;
-}
 
 export const getAllUsers = async (): Promise<IUser[]> => {
 	try {
@@ -74,6 +31,19 @@ export const getUserById = async (id: number): Promise<IUser> => {
 		}
 		console.log(error);
 		throw new Error(USER_ERRORS_MESSAGES.GET_USER_BY_ID_ERROR);
+	}
+};
+
+export const getMe = async (): Promise<IUser> => {
+	try {
+		const response = await Api.get(`/${RESOURCE}/me`);
+		return response.data;
+	} catch (error: unknown) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+		console.log(error);
+		throw new Error(USER_ERRORS_MESSAGES.USER_NOT_FOUND);
 	}
 };
 

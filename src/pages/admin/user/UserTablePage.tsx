@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { UserTable } from '@/components/admin/user/UserTable';
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
-import { IUser, deleteUser, getAllUsers } from '@/services/api/user/user';
+import { IUser } from '@/interfaces/user.interfaces';
+import { deleteUser, getAllUsers } from '@/services/api/user/user';
 
 export const UserTablePage = () => {
 	const [users, setUsers] = useState<IUser[]>([]);

@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import { AdminGuard } from '@/guard/AdminGuard';
 import { CarGalleryPage } from '@/pages/admin/car/CarGalleryPage';
 import { CarTablePage } from '@/pages/admin/car/CarTablePage';
 import { CreateCarFormPage } from '@/pages/admin/car/CreateCarFormPage';
@@ -46,32 +47,37 @@ const router = createBrowserRouter([
 				element: <ChangePassword />,
 			},
 			{
-				path: '/admin',
-				element: <AdminPage />,
+				element: <AdminGuard />,
 				children: [
 					{
-						path: '/admin/car',
-						element: <CarTablePage />,
-					},
-					{
-						path: '/admin/car-form',
-						element: <CreateCarFormPage />,
-					},
-					{
-						path: '/admin/car-edit/:id',
-						element: <EditCarFormPage />,
-					},
-					{
-						path: '/admin/car-gallery/:id',
-						element: <CarGalleryPage />,
-					},
-					{
-						path: '/admin/user',
-						element: <UserTablePage />,
-					},
-					{
-						path: '/admin/user-edit/:id',
-						element: <EditUserFormPage />,
+						path: '/admin',
+						element: <AdminPage />,
+						children: [
+							{
+								path: '/admin/car',
+								element: <CarTablePage />,
+							},
+							{
+								path: '/admin/car-form',
+								element: <CreateCarFormPage />,
+							},
+							{
+								path: '/admin/car-edit/:id',
+								element: <EditCarFormPage />,
+							},
+							{
+								path: '/admin/car-gallery/:id',
+								element: <CarGalleryPage />,
+							},
+							{
+								path: '/admin/user',
+								element: <UserTablePage />,
+							},
+							{
+								path: '/admin/user-edit/:id',
+								element: <EditUserFormPage />,
+							},
+						],
 					},
 				],
 			},

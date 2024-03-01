@@ -2,7 +2,7 @@ import { TrashIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 
 import { notifyConfirmation } from '@/helpers/notifications';
-import { IUser } from '@/services/api/user/user';
+import { IUser } from '@/interfaces/user.interfaces';
 
 interface IUserTable {
 	users: IUser[];
