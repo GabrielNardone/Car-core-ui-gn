@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { CarTable } from '@/components/admin/car/CarTable';
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
-import { ICar, deleteCar, getAllCars } from '@/services/api/car/car';
+import { ICar } from '@/interfaces/car.interfaces';
+import { deleteCar, getAllCars } from '@/services/api/car/car';
 
 export const CarTablePage = () => {
 	const [cars, setCars] = useState<ICar[]>([]);
@@ -71,6 +72,7 @@ export const CarTablePage = () => {
 							</div>
 							<div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 								<Link
+									data-cy="add-car-link"
 									to={'/admin/car-form'}
 									className="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
 								>

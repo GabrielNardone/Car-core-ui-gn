@@ -1,7 +1,7 @@
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/solid';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { ICarPicture } from '@/services/api/picture/picture';
+import { ICarPicture } from '@/interfaces/pictures.interfaces';
 
 export const CarGalleryPage = () => {
 	const { state: carData } = useLocation();

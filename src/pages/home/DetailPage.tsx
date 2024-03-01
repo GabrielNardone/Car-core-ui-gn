@@ -5,7 +5,8 @@ import { PiUsersFour } from 'react-icons/pi';
 import { Link, useParams } from 'react-router-dom';
 
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
-import { ICar, getCarById } from '@/services/api/car/car';
+import { ICar } from '@/interfaces/car.interfaces';
+import { getCarById } from '@/services/api/car/car';
 
 export function DetailPage() {
 	const [car, setCar] = useState({} as ICar);

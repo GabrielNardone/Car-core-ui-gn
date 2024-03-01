@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router-dom';
 
-import { Navbar } from '@components/navbar/Navbar';
+import { Navbar } from '@/components/navbar/Navbar';
 
 export default function Root() {
 	return (
 		<div className="flex flex-col h-screen">
 			<Navbar />
-			<div id="pages" className="flex-1 bg-gray-900">
+			<main id="pages" className="flex-1 bg-gray-900">
 				<Outlet />
-			</div>
+			</main>
 		</div>
 	);
 }

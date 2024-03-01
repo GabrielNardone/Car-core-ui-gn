@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { ICar } from '@/services/api/car/car';
+import { ICar } from '@/interfaces/car.interfaces';
 
 export const CarCard = ({ car }: { car: ICar }) => {
 	return (

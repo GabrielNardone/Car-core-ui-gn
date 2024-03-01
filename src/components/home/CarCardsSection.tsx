@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { CarCard } from './CarCard';
 
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
-import { ICar, getAllCars } from '@/services/api/car/car';
+import { ICar } from '@/interfaces/car.interfaces';
+import { getAllCars } from '@/services/api/car/car';
 
 export const CarCardsSection = () => {
 	const [cars, setCars] = useState<ICar[]>([]);

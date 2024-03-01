@@ -3,7 +3,7 @@ import { TrashIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 
 import { notifyConfirmation } from '@/helpers/notifications';
-import { ICar } from '@/services/api/car/car';
+import { ICar } from '@/interfaces/car.interfaces';
 
 interface ICarTable {
 	cars: ICar[];
