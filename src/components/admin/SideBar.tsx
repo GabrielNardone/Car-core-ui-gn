@@ -21,6 +21,7 @@ export const SideBar = () => {
 			<nav className="flex flex-col mx-2 space-y-1">
 				{navigation.map((item) => (
 					<NavLink
+						data-cy={`admin-sidebar-${item.name}-item`}
 						key={item.name}
 						to={item.href}
 						style={{

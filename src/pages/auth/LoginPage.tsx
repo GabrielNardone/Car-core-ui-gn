@@ -5,6 +5,7 @@ import { loginSchema } from '../../helpers/validations/auth-validations';
 import { AuthLayout } from './AuthLayout';
 
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
+import { useAuthContext } from '@/hooks/useAuthContext';
 import { login } from '@/services/api/auth/auth';
 
 interface ILoginState {
@@ -18,10 +19,13 @@ const INITIAL_LOGIN_STATE: ILoginState = {
 };
 export const LoginPage = () => {
 	const navigate = useNavigate();
+	const { setSession } = useAuthContext();
 	const handleSubmit = async (values: ILoginState) => {
 		try {
-			await login(values);
+			const tokenGroup = await login(values);
+			setSession(tokenGroup);
 			navigate('/');
+			location.reload();
 		} catch (error) {
 			if (error instanceof Error) {
 				notifyStatus(

@@ -12,7 +12,8 @@ import {
 	createPictureSchema,
 	editCarSchema,
 } from '@/helpers/validations/car.validations';
-import { ICar, editCar, getCarById } from '@/services/api/car/car';
+import { ICar } from '@/interfaces/car.interfaces';
+import { editCar, getCarById } from '@/services/api/car/car';
 import {
 	createCarPicture,
 	deletePicture,

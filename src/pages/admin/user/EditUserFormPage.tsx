@@ -5,22 +5,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
 import { editUserSchema } from '@/helpers/validations/user-validations';
-import {
-	IEditUserDto,
-	IUser,
-	editUser,
-	getUserById,
-} from '@/services/api/user/user';
+import { IEditUserDto, IUser } from '@/interfaces/user.interfaces';
+import { editUser, getUserById } from '@/services/api/user/user';
 
-interface IEditUserState {
-	firstName: string;
-	lastName: string;
-	dob: Date;
-	email: string;
-	address: string;
-	country: string;
-	role: string;
-}
+type IEditUserState = IEditUserDto;
 
 export const EditUserFormPage = () => {
 	const [user, setUser] = useState<IUser>({} as IUser);

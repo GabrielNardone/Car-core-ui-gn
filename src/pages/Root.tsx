@@ -6,9 +6,9 @@ export default function Root() {
 	return (
 		<div className="flex flex-col h-screen">
 			<Navbar />
-			<div id="pages" className="flex-1">
+			<main id="pages" className="flex-1">
 				<Outlet />
-			</div>
+			</main>
 		</div>
 	);
 }
