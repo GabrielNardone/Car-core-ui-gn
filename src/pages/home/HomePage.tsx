@@ -9,6 +9,7 @@ export default function HomePage() {
 			<div className="relative">
 				<div className=" w-full overflow-hidden">
 					<img
+						data-cy="home-background"
 						src="/home-background.jpg"
 						alt="home-background"
 						className="h-full w-full object-cover object-center"

@@ -54,7 +54,7 @@ export const ChangePasswordPage = () => {
 		<AuthLayout
 			title="Change your password"
 			subtitle="Use the confirmation code we sent to your email"
-			img="confirmation-password-image.svg"
+			img="/auth/confirmation-password-image.svg"
 		>
 			<form
 				onSubmit={formik.handleSubmit}

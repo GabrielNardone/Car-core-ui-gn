@@ -16,7 +16,6 @@ export const CarCard = ({ car }: { car: ICar }) => {
 				<div>
 					<h3 className="text-sm text-gray-200">
 						<span>
-							<span aria-hidden="true" className="absolute inset-0" />
 							{car.brand} {car.model}
 						</span>
 					</h3>

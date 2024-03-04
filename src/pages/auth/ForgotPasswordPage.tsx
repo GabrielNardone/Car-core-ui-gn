@@ -40,7 +40,7 @@ export const ForgotPasswordPage = () => {
 		<AuthLayout
 			title="Forgot your password?"
 			subtitle="Write the email with which you registered and we will send you a confirmation code to change your password."
-			img="forgot-password.svg"
+			img="/auth/forgot-password.svg"
 		>
 			<form
 				onSubmit={formik.handleSubmit}
