@@ -42,69 +42,81 @@ export function DetailPage() {
 	}
 
 	return (
-		<div className="bg-gray-900 text-white">
+		<div className="text-white">
 			<div className="pt-6 px-2 sm:px-0">
-				<div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+				<div className="mx-auto flex flex-col items-center mt-6 sm:px-6 sm:gap-x-2 gap-y-8 md:flex-row md:items-start md:justify-evenly  ">
+					<div className="w-fit mt-4 lg:mt-0">
+						<div
+							data-cy="detail-car-price"
+							className="flex justify-between items-center bg-gray-700 p-2 rounded-md"
+						>
+							<h2>Price per day</h2>
+							<p className="text-2xl tracking-tight text-emerald-500">
+								$ {car.pricePerDay}
+							</p>
+						</div>
+
+						<div
+							data-cy="detail-day-picker"
+							className="bg-violet-700 p-2 rounded-md w-96 h-96 mt-2"
+						>
+							DayPicker
+						</div>
+					</div>
+
 					<div>
 						<div className="w-full overflow-hidden rounded-md bg-gray-200 hover:opacity-75 lg:h-80">
 							<img
+								data-cy="detail-car-image"
 								src={car.images[0].src || 'no-image.jpg'}
 								alt={car.brand}
 								className="h-full w-full object-cover object-center lg:h-full lg:w-full"
 							/>
 						</div>
-						<Link to={`/somewhere/*****`} className="text-blue-500">
+						<Link
+							data-cy="detail-car-gallery-link"
+							to={`/car-gallery/${car.id}`}
+							state={{
+								pictures: car.images,
+								id: car.id,
+								brand: car.brand,
+								model: car.model,
+							}}
+							className="text-blue-500"
+						>
 							See all photos
 						</Link>
-					</div>
+						<div data-cy="detail-car-characteristics" className="pb-16 pt-10">
+							<div>
+								<h1 className="text-2xl font-bold tracking-tight  sm:text-3xl">
+									{car.brand} {car.model}
+								</h1>
+							</div>
 
-					<div className="mt-4 lg:mt-0">
-						<h2 className="">Price per day</h2>
-						<p className="text-3xl tracking-tight text-violet-200">
-							$ {car.pricePerDay}
-						</p>
-
-						<form className="mt-2 ">
-							<h3 className="text-sm font-medium ">Choose date and time</h3>
-
-							<div className="h-44 bg-violet-300 mt-2 rounded-md"></div>
-						</form>
-						<button
-							type="submit"
-							className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-violet-600 px-8 py-3 text-base font-medium text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-						>
-							Book
-						</button>
-					</div>
-				</div>
-
-				<div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:max-w-7xl">
-					<div>
-						<h1 className="text-2xl font-bold tracking-tight  sm:text-3xl">
-							{car.brand} {car.model}
-						</h1>
-					</div>
-
-					<div className="w-fit">
-						<div className="mt-4 flex items-center gap-x-2">
-							<MdOutlineColorLens className="text-xl" />
-							<span className="text-xl">
-								Color: <span className="text-slate-400">{car.color}</span>
-							</span>
-						</div>
-						<div className="mt-4 flex items-center gap-x-2">
-							<PiUsersFour className="text-xl" />
-							<span className="text-xl">
-								Passengers:{' '}
-								<span className="text-slate-400">{car.passengers}</span>
-							</span>
-						</div>
-						<div className="mt-4 flex items-center gap-x-2">
-							<FiWind className="text-xl" />
-							<span className="text-xl">
-								Air conditioning:{' '}
-								<span className="text-slate-400">{car.ac ? 'Yes' : 'No'}</span>
-							</span>
+							<div className="w-fit">
+								<div className="mt-4 flex items-center gap-x-2">
+									<MdOutlineColorLens className="text-xl" />
+									<span className="text-xl">
+										Color: <span className="text-slate-400">{car.color}</span>
+									</span>
+								</div>
+								<div className="mt-4 flex items-center gap-x-2">
+									<PiUsersFour className="text-xl" />
+									<span className="text-xl">
+										Passengers:{' '}
+										<span className="text-slate-400">{car.passengers}</span>
+									</span>
+								</div>
+								<div className="mt-4 flex items-center gap-x-2">
+									<FiWind className="text-xl" />
+									<span className="text-xl">
+										Air conditioning:{' '}
+										<span className="text-slate-400">
+											{car.ac ? 'Yes' : 'No'}
+										</span>
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

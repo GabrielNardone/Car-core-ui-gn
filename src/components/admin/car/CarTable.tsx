@@ -83,7 +83,7 @@ export const CarTable = ({ cars, handleDeleteCar }: ICarTable) => {
 						<td className="flex whitespace-nowrap px-3 py-4 text-sm text-gray-300">
 							<Link
 								data-cy="gallery-button"
-								to={`/admin/car-gallery/${car.id}`}
+								to={`/car-gallery/${car.id}`}
 								state={{
 									pictures: car.images,
 									id: car.id,

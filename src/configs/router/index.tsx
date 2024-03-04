@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { AdminGuard } from '@/guard/AdminGuard';
-import { CarGalleryPage } from '@/pages/admin/car/CarGalleryPage';
 import { CarTablePage } from '@/pages/admin/car/CarTablePage';
 import { CreateCarFormPage } from '@/pages/admin/car/CreateCarFormPage';
 import { EditCarFormPage } from '@/pages/admin/car/EditCarFormPage';
@@ -12,6 +11,7 @@ import { ChangePasswordPage } from '@/pages/auth/ChangePasswordPage';
 import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
+import { CarGalleryPage } from '@/pages/home/CarGalleryPage';
 import { DetailPage } from '@/pages/home/DetailPage';
 import HomePage from '@/pages/home/HomePage';
 
@@ -30,6 +30,10 @@ const router = createBrowserRouter([
 			{
 				path: '/detail/:id',
 				element: <DetailPage />,
+			},
+			{
+				path: '/car-gallery/:id',
+				element: <CarGalleryPage />,
 			},
 			{
 				path: '/about',
@@ -70,10 +74,7 @@ const router = createBrowserRouter([
 								path: '/admin/car-edit/:id',
 								element: <EditCarFormPage />,
 							},
-							{
-								path: '/admin/car-gallery/:id',
-								element: <CarGalleryPage />,
-							},
+
 							{
 								path: '/admin/user',
 								element: <UserTablePage />,

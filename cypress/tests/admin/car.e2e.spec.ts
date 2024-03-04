@@ -3,7 +3,7 @@ describe('Car table', () => {
 		cy.login('gabriel@gmail.com', 'Gabriel12');
 	});
 
-	const GALLERY_URL = 'http://localhost:3000/admin/car-gallery/2';
+	const GALLERY_URL = 'http://localhost:3000/car-gallery/2';
 
 	it('Should display a list of cars', () => {
 		cy.intercept('GET', '/api/car', {
