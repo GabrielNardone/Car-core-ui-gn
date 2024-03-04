@@ -1,6 +1,10 @@
 describe('User table', () => {
 	beforeEach(() => {
 		cy.login('erik@gmail.com', 'Erik1234');
+		cy.intercept('GET', '/api/car', {
+			fixture: 'get-all-cars-mock.json',
+			statusCode: 200,
+		}).as('getAllCars');
 	});
 
 	it('Should display a list of users', () => {
@@ -46,6 +50,10 @@ describe('User form edit', () => {
 			fixture: 'get-user-by-id-mock.json',
 			statusCode: 200,
 		}).as('getUserById');
+		cy.intercept('GET', '/api/car', {
+			fixture: 'get-all-cars-mock.json',
+			statusCode: 200,
+		}).as('getAllCars');
 	});
 
 	it('Should edit a user', () => {
@@ -100,6 +108,10 @@ describe('User table delete', () => {
 			fixture: 'get-all-users-mock.json',
 			statusCode: 200,
 		}).as('getAllUsers');
+		cy.intercept('GET', '/api/car', {
+			fixture: 'get-all-cars-mock.json',
+			statusCode: 200,
+		}).as('getAllCars');
 	});
 
 	it('Should delete a user', () => {
