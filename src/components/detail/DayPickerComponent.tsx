@@ -39,7 +39,7 @@ export const DayPickerComponent = ({
 			startingDate: range?.from,
 			endDate: range?.to,
 			dueDate: range?.to,
-			rejected: false,
+			rejected: true,
 		};
 
 		await createRent(newRent);

@@ -1,17 +1,23 @@
 import { KeyIcon } from '@heroicons/react/24/outline';
 import { UserIcon } from '@heroicons/react/24/solid';
+import { BiSolidCar } from 'react-icons/bi';
 import { NavLink } from 'react-router-dom';
 
 const navigation = [
 	{
 		name: 'Car',
 		href: '/admin/car',
-		icon: KeyIcon,
+		icon: BiSolidCar,
 	},
 	{
 		name: 'User',
 		href: '/admin/user',
 		icon: UserIcon,
+	},
+	{
+		name: 'Rent',
+		href: '/admin/pendding-rent',
+		icon: KeyIcon,
 	},
 ];
 

@@ -5,6 +5,8 @@ import { CarTablePage } from '@/pages/admin/car/CarTablePage';
 import { CreateCarFormPage } from '@/pages/admin/car/CreateCarFormPage';
 import { EditCarFormPage } from '@/pages/admin/car/EditCarFormPage';
 import { AdminLayout } from '@/pages/admin/layout/AdminLayout';
+import { AcceptedRentTablePage } from '@/pages/admin/rent/AcceptedRentTablePage';
+import { PenddingRentTablePage } from '@/pages/admin/rent/PenddingRentTablePage';
 import { EditUserFormPage } from '@/pages/admin/user/EditUserFormPage';
 import { UserTablePage } from '@/pages/admin/user/UserTablePage';
 import { ChangePasswordPage } from '@/pages/auth/ChangePasswordPage';
@@ -82,6 +84,14 @@ const router = createBrowserRouter([
 							{
 								path: '/admin/user-edit/:id',
 								element: <EditUserFormPage />,
+							},
+							{
+								path: '/admin/pendding-rent',
+								element: <PenddingRentTablePage />,
+							},
+							{
+								path: '/admin/accepted-rent',
+								element: <AcceptedRentTablePage />,
 							},
 						],
 					},

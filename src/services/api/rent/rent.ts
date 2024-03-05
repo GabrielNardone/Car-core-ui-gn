@@ -48,7 +48,6 @@ export interface IEditRentDto {
 export const getAllRents = async (): Promise<IRent[]> => {
 	try {
 		const { data } = await Api.get(`/${RESOURCE}`);
-		console.log(data);
 
 		return data;
 	} catch (error: unknown) {
@@ -90,10 +89,10 @@ export const createRent = async (newRent: INewRentDto): Promise<number> => {
 };
 export const editRent = async (
 	id: number,
-	editRent: INewRentDto,
+	editedRent: IEditRentDto,
 ): Promise<number> => {
 	try {
-		const { status } = await Api.post(`/${RESOURCE}/${id}`, editRent);
+		const { status } = await Api.patch(`/${RESOURCE}/${id}`, editedRent);
 		return status;
 	} catch (error) {
 		if (error instanceof AxiosError) {
