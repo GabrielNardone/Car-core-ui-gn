@@ -4,6 +4,7 @@ import { MdOutlineColorLens } from 'react-icons/md';
 import { PiUsersFour } from 'react-icons/pi';
 import { Link, useParams } from 'react-router-dom';
 
+import { DayPickerComponent } from '@/components/detail/DayPickerComponent';
 import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
 import { ICar } from '@/interfaces/car.interfaces';
 import { getCarById } from '@/services/api/car/car';
@@ -56,12 +57,7 @@ export function DetailPage() {
 							</p>
 						</div>
 
-						<div
-							data-cy="detail-day-picker"
-							className="bg-violet-700 p-2 rounded-md w-96 h-96 mt-2"
-						>
-							DayPicker
-						</div>
+						<DayPickerComponent carId={carId} carPrice={car.pricePerDay} />
 					</div>
 
 					<div>
