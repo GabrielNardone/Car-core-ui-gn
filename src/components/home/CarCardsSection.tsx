@@ -1,39 +1,22 @@
-import { useEffect, useState } from 'react';
-
 import { CarCard } from './CarCard';
 
-import { NOTIFICATION_TYPE, notifyStatus } from '@/helpers/notifications';
-import { ICar } from '@/interfaces/car.interfaces';
-import { getAllCars } from '@/services/api/car/car';
+import { useFetchAllCars } from '@/hooks/useFetchAllCars';
 
 export const CarCardsSection = () => {
-	const [cars, setCars] = useState<ICar[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
-
-	const fetchCars = async (): Promise<void> => {
-		try {
-			const cars = await getAllCars();
-			setCars(cars);
-			setIsLoading(false);
-		} catch (error) {
-			if (error instanceof Error) {
-				notifyStatus(
-					NOTIFICATION_TYPE.ERROR,
-					'home-get-all-cars-error-alert',
-					error.message,
-				);
-			}
-		}
-	};
-
-	useEffect(() => {
-		fetchCars();
-	}, []);
+	const { cars, isLoading, isError } = useFetchAllCars();
 
 	if (isLoading) {
 		return (
 			<div className="w-full h-96 grid place-content-center text-white text-xl">
 				Loading...
+			</div>
+		);
+	}
+
+	if (isError) {
+		return (
+			<div className="w-full h-96 grid place-content-center text-red-500 text-xl">
+				Error loading cars
 			</div>
 		);
 	}
@@ -49,7 +32,7 @@ export const CarCardsSection = () => {
 					data-cy="car-cards-section"
 					className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:gap-x-8"
 				>
-					{cars.map((car) => (
+					{cars?.map((car) => (
 						<CarCard key={car.id} car={car} />
 					))}
 				</div>
