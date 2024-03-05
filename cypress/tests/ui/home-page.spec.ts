@@ -23,7 +23,6 @@ describe('Home page', () => {
 			statusCode: 200,
 		}).as('getAllCars');
 
-		cy.getBySel('car-cards-section').should('have.descendants', 'div');
 		cy.getBySel('car-card').should('have.length', 4);
 		cy.getBySel('book-car-link').should('exist').and('contain', 'Book');
 	});

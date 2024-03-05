@@ -28,10 +28,7 @@ export const CarCardsSection = () => {
 					Choose the car that suits you best
 				</h2>
 
-				<div
-					data-cy="car-cards-section"
-					className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:gap-x-8"
-				>
+				<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:gap-x-8">
 					{cars?.map((car) => (
 						<CarCard key={car.id} car={car} />
 					))}
