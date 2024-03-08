@@ -23,6 +23,9 @@ describe('Home page', () => {
 			statusCode: 200,
 		}).as('getAllCars');
 
+		cy.getBySel('home-car-cards-title')
+			.should('be.visible')
+			.and('contain.text', 'Choose the car that suits you best');
 		cy.getBySel('car-card').should('have.length', 4);
 		cy.getBySel('book-car-link').should('exist').and('contain', 'Book');
 	});
