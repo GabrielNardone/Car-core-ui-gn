@@ -1,4 +1,3 @@
-import { TruckIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 import { AuthStatus } from '@/context/authReducer';
@@ -11,12 +10,12 @@ export const Navbar = () => {
 	return (
 		<nav className="bg-white border-gray-200 dark:bg-gray-900 dark:border-b dark:border-gray-700">
 			<div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-				<a href="#" className="flex items-center text-white">
-					<TruckIcon className="h-8 mr-3" />
-					<span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-						Car Rental
+				<Link to={'/'} className="flex items-center text-white">
+					<img src="/car-1.png" alt="car-logo" className="w-10 mr-2" />
+					<span className="self-center text-2xl whitespace-nowrap dark:text-violet-400 font-serif underline">
+						Highway-12
 					</span>
-				</a>
+				</Link>
 
 				<div className="hidden w-full md:block md:w-auto" id="navbar-default">
 					<ul className="font-medium flex flex-col p-4 md:p-0 mt-4 rounded-lg md:flex-row md:items-center md:space-x-8 md:mt-0 ">
@@ -43,7 +42,7 @@ export const Navbar = () => {
 								)}
 						</li>
 						<li>
-							{state?.status === 'authenticated' ? (
+							{state?.status === AuthStatus.AUTHENTICATED ? (
 								<button
 									data-cy="logout-button"
 									className="px-4 py-1 bg-red-600 opacity-70 text-black rounded dark:text-white hover:opacity-100"

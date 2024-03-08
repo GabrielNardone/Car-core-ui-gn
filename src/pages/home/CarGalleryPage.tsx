@@ -13,14 +13,11 @@ export const CarGalleryPage = () => {
 				<div className="flex">
 					<div>
 						<h2 className="text-base font-semibold leading-7 text-white">
-							{carData.brand} {carData.model} (ID {carData.id}) gallery
+							{carData.brand} {carData.model} gallery
 						</h2>
-						<p className="mt-1 text-sm leading-6 text-gray-400">
-							In order to create a new car
-						</p>
 					</div>
 					<div className="flex-1"></div>
-					<button onClick={() => navigate('/admin/car')}>
+					<button onClick={() => navigate(-1)}>
 						<ArrowUturnLeftIcon className="w-6 text-white" />
 					</button>
 				</div>

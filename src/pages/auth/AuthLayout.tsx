@@ -12,7 +12,7 @@ export const AuthLayout = ({
 	children,
 	title,
 	subtitle,
-	img = 'login-image.svg',
+	img = '/auth/login-image.svg',
 }: IAuthLayout) => {
 	return (
 		<div className="flex h-full  flex-col items-center justify-center bg-gray-900">

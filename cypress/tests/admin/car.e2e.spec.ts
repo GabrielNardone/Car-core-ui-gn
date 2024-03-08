@@ -3,7 +3,7 @@ describe('Car table', () => {
 		cy.login('gabriel@gmail.com', 'Gabriel12');
 	});
 
-	const GALLERY_URL = 'http://localhost:3000/admin/car-gallery/2';
+	const GALLERY_URL = 'http://localhost:3000/car-gallery/2';
 
 	it('Should display a list of cars', () => {
 		cy.intercept('GET', '/api/car', {
@@ -34,8 +34,12 @@ describe('Car table', () => {
 			statusCode: 500,
 		}).as('getAllCarsError');
 
-		cy.get('[data-cy=admin-page-link]').click();
-		cy.get('[data-cy=admin-sidebar-Car-item]').click();
+		cy.get('[data-cy=home-get-all-cars-error-alert]')
+			.should('be.visible')
+			.and('contain', 'Request failed with status code 500');
+
+		cy.get('[data-cy=admin-page-link]').click({ force: true });
+		cy.get('[data-cy=admin-sidebar-Car-item]').click({ force: true });
 
 		cy.get('[data-cy=get-all-cars-error-alert]')
 			.should('be.visible')

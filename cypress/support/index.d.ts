@@ -10,5 +10,6 @@ declare namespace Cypress {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			args?: any,
 		): Chainable<JQuery<HTMLElement>>;
+		login(email: string, password: string): Chainable<JQuery<HTMLElement>>;
 	}
 }

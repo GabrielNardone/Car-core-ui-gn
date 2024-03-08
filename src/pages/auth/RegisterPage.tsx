@@ -57,7 +57,7 @@ export const RegisterPage = () => {
 		},
 	});
 	return (
-		<AuthLayout title="Register" img="register-image.svg">
+		<AuthLayout title="Register" img="/auth/register-image.svg">
 			<form
 				onSubmit={formik.handleSubmit}
 				noValidate

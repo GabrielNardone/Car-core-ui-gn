@@ -19,7 +19,7 @@ const INITIAL_CHANGE_PASSWORD_STATE: IChangePasswordState = {
 	confirmationCode: '',
 	newPassword: '',
 };
-export const ChangePassword = () => {
+export const ChangePasswordPage = () => {
 	const navigate = useNavigate();
 
 	const handleSubmit = async (values: IChangePasswordState) => {
@@ -54,7 +54,7 @@ export const ChangePassword = () => {
 		<AuthLayout
 			title="Change your password"
 			subtitle="Use the confirmation code we sent to your email"
-			img="confirmation-password-image.svg"
+			img="/auth/confirmation-password-image.svg"
 		>
 			<form
 				onSubmit={formik.handleSubmit}
