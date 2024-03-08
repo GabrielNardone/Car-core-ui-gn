@@ -10,7 +10,7 @@ export const useFetchOneCar = (carId: number) => {
 		isError,
 		error,
 	} = useQuery({
-		queryKey: ['car'],
+		queryKey: ['car', carId],
 		queryFn: () => getCarById(carId),
 		retry: false,
 	});

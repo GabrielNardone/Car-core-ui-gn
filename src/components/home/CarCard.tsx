@@ -7,7 +7,7 @@ export const CarCard = ({ car }: { car: ICar }) => {
 		<div data-cy="car-card">
 			<div className="w-full overflow-hidden rounded-md bg-gray-200 hover:opacity-75 lg:h-80">
 				<img
-					src={car.images[0].src || 'no-image.jpg'}
+					src={car.images[0].src}
 					alt={car.brand}
 					className="h-full w-full object-cover object-center lg:h-full lg:w-full"
 				/>
@@ -23,14 +23,17 @@ export const CarCard = ({ car }: { car: ICar }) => {
 					<Link
 						data-cy="book-car-link"
 						to={`/detail/${car.id}`}
-						className="mt-1 text-violet-200"
+						className="mt-1 text-blue-500"
 					>
 						Book
 					</Link>
 				</div>
-				<p className="text-sm font-medium text-violet-200">
-					$ {car.pricePerDay}
-				</p>
+				<div>
+					<p>Passengers : {car.passengers}</p>
+					<p className="text-sm font-medium text-violet-200">
+						Price per day: ${car.pricePerDay}
+					</p>
+				</div>
 			</div>
 		</div>
 	);
